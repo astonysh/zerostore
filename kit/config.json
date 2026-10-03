@@ -1,0 +1,57 @@
+{
+  "CHECKOUT_URL": "https://astonysh.gumroad.com/l/zerostore-pro",
+  "checkout_provider": "gumroad",
+
+  "site": {
+    "url": "https://YOUR-GITHUB-NAME.github.io/my-store/",
+    "lang": "en",
+    "theme": "dark",
+    "accent": "#7c5cff",
+    "title": "ZeroStore Pro — the AI-agent playbook for selling digital products",
+    "description": "Six agent skills, license-key scripts and a launch playbook for finding, building and launching a digital product from zero.",
+    "og_image": "assets/og.png",
+    "favicon_emoji": "🛍️"
+  },
+
+  "product": {
+    "name": "ZeroStore Pro",
+    "price": "29",
+    "compare_at_price": "49",
+    "currency": "$",
+    "price_note": "One-time payment · instant download · 14-day refund",
+    "cta_label": "Get ZeroStore Pro"
+  },
+
+  "hero": {
+    "eyebrow": "Example store — edit config.json",
+    "headline": "Find, build and launch a digital product with AI agents",
+    "subheadline": "Six SKILL.md skills for Claude Code, Codex, Cursor and Gemini CLI, plus license-key scripts and a launch playbook with 20+ post templates."
+  },
+
+  "features": [
+    { "title": "Niche research skill", "text": "Collects demand evidence — marketplace reviews, competitor prices, real threads — and scores ideas before you build." },
+    { "title": "Build & copy skills", "text": "Product builder, landing copy and SEO page skills that work inside your coding agent." },
+    { "title": "Launch playbook", "text": "20+ post templates and a subreddit rules cheat sheet, so you launch without getting banned." }
+  ],
+
+  "includes": [
+    "6 agent skills (SKILL.md)",
+    "Gumroad license-key checks: Node, Python, browser",
+    "Launch playbook + 20+ post templates",
+    "Free updates"
+  ],
+
+  "faq": [
+    { "q": "Which agents does it work with?", "a": "Anything that reads SKILL.md: Claude Code, Codex CLI, Cursor, Gemini CLI. The files are plain Markdown, so you can follow them by hand too." },
+    { "q": "Will it make me money?", "a": "No promises. It gives you a tested process and tooling; results depend on your product and your launch." },
+    { "q": "Can I get a refund?", "a": "Yes, within 14 days. Reply to your receipt email." }
+  ],
+
+  "footer": {
+    "text": "© 2026 Your Name. Questions? Reply to your receipt email."
+  },
+
+  "analytics": {
+    "goatcounter": ""
+  }
+}

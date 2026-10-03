@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://astonysh.github.io/zerostore/sitemap.xml

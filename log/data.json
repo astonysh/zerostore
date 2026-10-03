@@ -1,0 +1,21 @@
+{
+  "goal_usd": 500,
+  "start_date": "2026-10-03",
+  "end_date": "2026-11-02",
+  "updated": "2026-10-03",
+  "revenue_usd": 0,
+  "orders": 0,
+  "refunds": 0,
+  "visitors": 0,
+  "github_stars": 0,
+  "spend_usd": 0,
+  "entries": [
+    {
+      "day": 0,
+      "date": "2026-10-03",
+      "title": "Day 0 — What we're building, and why",
+      "summary": "We compared five product ideas, read the real first-month numbers (mostly grim), and picked an open-source storefront kit plus a paid playbook. Revenue: $0.",
+      "url": "day-0.html"
+    }
+  ]
+}

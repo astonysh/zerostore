@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZeroStore — Two AI agents. $0 audience. 30 days. Can they make $500?</title>
+  <meta name="description" content="An open-source kit for selling digital products from GitHub Pages — and a public experiment: two AI agents try to make $500 in 30 days with no audience and no ad budget. Every number is public.">
+  <link rel="canonical" href="https://astonysh.github.io/zerostore/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ZeroStore — Can two AI agents make $500 in 30 days from zero?">
+  <meta property="og:description" content="Open-source GitHub Pages storefront kit + a fully public revenue experiment.">
+  <meta property="og:url" content="https://astonysh.github.io/zerostore/">
+  <meta property="og:image" content="https://astonysh.github.io/zerostore/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"ZeroStore","applicationCategory":"DeveloperApplication","operatingSystem":"Any","license":"https://opensource.org/licenses/MIT","url":"https://astonysh.github.io/zerostore/","offers":[{"@type":"Offer","price":"0","priceCurrency":"USD","name":"ZeroStore kit (MIT)"},{"@type":"Offer","price":"29","priceCurrency":"USD","name":"ZeroStore Pro"}]}
+  </script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="logo" href="./">Zero<span>Store</span></a>
+    <div class="nav-links">
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#pricing">Pricing</a>
+      <a href="log/">Experiment log</a>
+      <a class="hide-sm" href="https://github.com/astonysh/zerostore">GitHub</a>
+      <a class="btn btn-primary btn-sm" href="https://astonysh.gumroad.com/l/zerostore-pro" data-gumroad-overlay-checkout="true">Get Pro</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Public experiment · Oct 3 – Nov 2, 2026</span>
+    <h1>Two AI agents. $0 audience. 30&nbsp;days.<br><em>Can they make $500?</em></h1>
+    <p class="lead">ZeroStore is the open-source kit they're using to sell digital products straight from GitHub Pages — no domain, no server, no monthly fees. The kit is free. Every dollar (and every zero) is published below.</p>
+    <div class="cta-row">
+      <a class="btn btn-ghost" href="https://github.com/astonysh/zerostore">★ Get the free kit on GitHub</a>
+      <a class="btn btn-primary" href="https://astonysh.gumroad.com/l/zerostore-pro" data-gumroad-overlay-checkout="true">Get Pro — $29</a>
+    </div>
+
+    <div class="progress-card" data-progress="log/data.json">
+      <div class="progress-top">
+        <div class="progress-amount"><span data-k="revenue">$0</span> <small>of <span data-k="goal">$500</span> goal</small></div>
+        <div class="progress-meta" data-k="day">Day 0 of 30</div>
+      </div>
+      <div class="bar" role="progressbar" aria-label="Revenue toward $500 goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+      <div class="stats">
+        <div class="stat"><b data-k="orders">0</b><span>orders</span></div>
+        <div class="stat"><b data-k="visitors">0</b><span>visitors</span></div>
+        <div class="stat"><b data-k="stars">0</b><span>GitHub stars</span></div>
+        <div class="stat"><b data-k="spend">$0</b><span>spent on ads</span></div>
+      </div>
+      <p class="progress-note">Updated by hand from the payment dashboard · last update <span data-k="updated">2026-10-03</span> · <a href="log/">read the daily log →</a></p>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="sub">The same three steps the agents are running in public. The free kit covers step 3; Pro adds the agent skills for steps 1–2 and the launch playbook.</p>
+    <div class="grid-3">
+      <div class="card">
+        <span class="step-no">1</span>
+        <h3>Find a niche with proof</h3>
+        <p>Look for buyers who already pay: marketplace review counts, competitor prices, real threads. Skip anything that needs an audience you don't have.</p>
+      </div>
+      <div class="card">
+        <span class="step-no">2</span>
+        <h3>Build the product in days</h3>
+        <p>Templates, spreadsheets, starter kits, guides — things an AI coding agent can produce and a human can check in an afternoon.</p>
+      </div>
+      <div class="card">
+        <span class="step-no">3</span>
+        <h3>Ship a storefront on GitHub Pages</h3>
+        <p>Edit one <code>config.json</code>, push, and a GitHub Action publishes a fast landing page with checkout, sitemap and robots.txt. Free hosting, forever.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>What's in the free kit</h2>
+    <p class="sub">MIT licensed. No build tools to install — Node is only used inside the GitHub Action.</p>
+<pre><code>npx degit astonysh/zerostore/kit my-store
+cd my-store
+# edit config.json: name, price, CHECKOUT_URL, copy, FAQ
+node scripts/build.mjs        # optional local preview → dist/index.html
+git init && git add -A && git commit -m "my store"
+# push to GitHub → Settings → Pages → Source: GitHub Actions</code></pre>
+    <div class="grid-3" style="margin-top:18px">
+      <div class="card"><h3>One-file landing page</h3><p>Hero, features, pricing, FAQ, footer. Dark and light themes. Loads in well under a second.</p></div>
+      <div class="card"><h3>Checkout that just works</h3><p>Gumroad overlay, Lemon Squeezy overlay, or Payhip — switch with one config field. They handle cards, PayPal and sales tax.</p></div>
+      <div class="card"><h3>SEO basics done</h3><p>Open Graph tags, JSON-LD product data, canonical URL, auto-generated <code>sitemap.xml</code> and <code>robots.txt</code>.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Free kit vs. Pro</h2>
+    <p class="sub">The storefront is free and always will be. Pro is the agent playbook we're actually using to find, build and launch products — skills, scripts and post templates.</p>
+    <div class="pricing">
+      <div class="plan">
+        <h3>ZeroStore kit</h3>
+        <div class="price">$0</div>
+        <div class="price-note">MIT license · GitHub</div>
+        <ul>
+          <li>Single-file landing page template</li>
+          <li><code>config.json</code> for name, price, copy, FAQ</li>
+          <li>Gumroad / Lemon Squeezy / Payhip checkout</li>
+          <li>GitHub Actions deploy + sitemap + robots.txt</li>
+          <li>Optional GoatCounter analytics (off by default)</li>
+          <li>Payment setup guide</li>
+          <li class="no">AI agent skills</li>
+          <li class="no">License-key scripts</li>
+          <li class="no">Launch playbook &amp; post templates</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://github.com/astonysh/zerostore">Get it on GitHub</a>
+      </div>
+      <div class="plan featured">
+        <h3>ZeroStore Pro <span class="badge">Launch price</span></h3>
+        <div class="price">$29 <s>$49</s></div>
+        <div class="price-note">One-time · launch price for the first 7 days · 14-day refund</div>
+        <ul>
+          <li>Everything in the free kit</li>
+          <li>6 agent skills (SKILL.md — Claude Code, Codex, Cursor, Gemini CLI): niche research, product builder, landing copy, SEO pages, launch posts, daily log</li>
+          <li>Gumroad license-key checks for Node, Python and the browser</li>
+          <li>Launch playbook: 20+ post templates and a subreddit rules cheat sheet</li>
+          <li>The real numbers from this experiment, updated at day 30</li>
+          <li>Free updates</li>
+        </ul>
+        <a class="btn btn-primary" href="https://astonysh.gumroad.com/l/zerostore-pro" data-gumroad-overlay-checkout="true">Get Pro — $29</a>
+      </div>
+    </div>
+
+    <div style="margin-top:34px; overflow-x:auto">
+      <table class="cmp">
+        <thead><tr><th>Feature</th><th>Free</th><th>Pro</th></tr></thead>
+        <tbody>
+          <tr><td>Static storefront on GitHub Pages, deploy via Actions</td><td class="y">✓</td><td class="y">✓</td></tr>
+          <tr><td>Checkout via Gumroad, Lemon Squeezy or Payhip</td><td class="y">✓</td><td class="y">✓</td></tr>
+          <tr><td>Sitemap, robots.txt, Open Graph, JSON-LD</td><td class="y">✓</td><td class="y">✓</td></tr>
+          <tr><td>Niche research skill (demand evidence + scoring rubric)</td><td class="n">–</td><td class="y">✓</td></tr>
+          <tr><td>Product builder, landing copy and SEO page skills</td><td class="n">–</td><td class="y">✓</td></tr>
+          <tr><td>License-key verification (Node, Python, browser)</td><td class="n">–</td><td class="y">✓</td></tr>
+          <tr><td>Launch playbook, 20+ post templates, subreddit rules</td><td class="n">–</td><td class="y">✓</td></tr>
+          <tr><td>Daily-log skill (turn your dashboard into a public log)</td><td class="n">–</td><td class="y">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>See it in use</h2>
+    <p class="sub">The first product sold with ZeroStore during the experiment: a set of profit and fee spreadsheets for Etsy and Shopify sellers.</p>
+    <a class="log-item" href="demo/seller-profit-sheets/">
+      <span class="d">Demo store</span>
+      <h3>Seller Profit Sheets →</h3>
+      <p>A real storefront built from the free kit. If it sells, you'll see it in the log.</p>
+    </a>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>FAQ</h2>
+    <p class="sub">Straight answers.</p>
+    <details><summary>Will this make me money?</summary><p>No promise. Most digital products earn little or nothing in their first month, and we may miss $500 too. What you get is working tooling and an honest record of what did and didn't work. Pro is for people who want the full playbook and agent skills.</p></details>
+    <details><summary>Do I need a domain or a server?</summary><p>No. The storefront runs on GitHub Pages at <code>yourname.github.io/your-store</code>. You can add a custom domain later if you want.</p></details>
+    <details><summary>How do I get paid?</summary><p>Through Gumroad, Lemon Squeezy or Payhip. They act as the checkout and take care of cards, PayPal and sales tax. Setup takes about 10 minutes and the free kit includes a step-by-step guide. Payout methods differ by country — check your platform's payout settings before you launch.</p></details>
+    <details><summary>Which AI agents do the Pro skills work with?</summary><p>They use the open SKILL.md format, so they work with Claude Code and with other agents that read it (Codex CLI, Cursor, Gemini CLI). They're plain Markdown, so you can also read and follow them by hand.</p></details>
+    <details><summary>Who is behind this?</summary><p>One human who owns the GitHub account, plus two AI agents that did the research, wrote the code and drafted the copy. The human approves anything that gets published or posted.</p></details>
+    <details><summary>Can I get a refund?</summary><p>Yes — 14 days, no questions asked. Email via the Gumroad receipt.</p></details>
+    <details><summary>Are the numbers real?</summary><p>Yes. Revenue, orders and spend are copied from the payment dashboard into <code>log/data.json</code> in the public repo, so every change is in the git history. No fake testimonials, no screenshots we can't back up.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p><strong style="color:var(--text)">ZeroStore</strong> — an open-source storefront kit and a public experiment.</p>
+      <p>Nothing on this site is a promise of income. Past results (including ours) don't predict yours. This project was built with AI agents; a human reviews everything before it ships.</p>
+    </div>
+    <div>
+      <p><a href="log/">Experiment log</a> · <a href="https://github.com/astonysh/zerostore">GitHub</a> · <a href="https://github.com/astonysh/zerostore/blob/main/LICENSE">MIT license</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/progress.js" defer></script>
+<script src="https://gumroad.com/js/gumroad.js" defer></script>
+</body>
+</html>

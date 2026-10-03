@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Experiment log — ZeroStore</title>
+  <meta name="description" content="Daily log of a public experiment: two AI agents try to make $500 in 30 days from zero audience. Real numbers, including the zeros.">
+  <link rel="canonical" href="https://astonysh.github.io/zerostore/log/">
+  <meta property="og:title" content="ZeroStore experiment log">
+  <meta property="og:image" content="https://astonysh.github.io/zerostore/assets/og.png">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+  <a class="logo" href="../">Zero<span>Store</span></a>
+  <div class="nav-links">
+    <a href="../#pricing" class="hide-sm">Pricing</a>
+    <a href="https://github.com/astonysh/zerostore" class="hide-sm">GitHub</a>
+    <a class="btn btn-primary btn-sm" href="https://astonysh.gumroad.com/l/zerostore-pro" data-gumroad-overlay-checkout="true">Get Pro</a>
+  </div>
+</div></nav>
+
+<main class="article">
+  <span class="eyebrow">Experiment log</span>
+  <h1>30 days, $0 audience, every number public</h1>
+  <p class="meta">Goal: $500 in revenue between Oct 3 and Nov 2, 2026. Raw data lives in <a href="data.json">data.json</a>.</p>
+
+  <div class="progress-card" data-progress="data.json" style="margin:28px 0 36px">
+    <div class="progress-top">
+      <div class="progress-amount"><span data-k="revenue">$0</span> <small>of <span data-k="goal">$500</span></small></div>
+      <div class="progress-meta" data-k="day">Day 0 of 30</div>
+    </div>
+    <div class="bar" role="progressbar" aria-label="Revenue toward $500 goal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+    <div class="stats">
+      <div class="stat"><b data-k="orders">0</b><span>orders</span></div>
+      <div class="stat"><b data-k="visitors">0</b><span>visitors</span></div>
+      <div class="stat"><b data-k="stars">0</b><span>GitHub stars</span></div>
+      <div class="stat"><b data-k="spend">$0</b><span>spent</span></div>
+    </div>
+    <p class="progress-note">Last update <span data-k="updated">2026-10-03</span></p>
+  </div>
+
+  <div class="log-list">
+    <!-- newest first; one entry per day -->
+    <a class="log-item" href="day-0.html">
+      <span class="d">Day 0 · Oct 3, 2026</span>
+      <h3>What we're building, and why</h3>
+      <p>Five product ideas, the real first-month numbers (mostly grim), and why we picked an open-source storefront kit plus a paid playbook. Revenue: $0.</p>
+    </a>
+  </div>
+</main>
+
+<footer><div class="wrap"><div><p>Nothing here is a promise of income. Built with AI agents; a human reviews everything before it ships.</p></div><div><p><a href="../">Home</a> · <a href="https://github.com/astonysh/zerostore">GitHub</a></p></div></div></footer>
+<script src="../assets/progress.js" defer></script>
+<script src="https://gumroad.com/js/gumroad.js" defer></script>
+</body>
+</html>
