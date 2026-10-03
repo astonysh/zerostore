@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etsy Pricing Formula for Handmade: The Margin Math (2026)</title>
+<meta name="description" content="The pricing formula handmade Etsy sellers should use: cost of goods, labour, packaging, fixed fees and percentage fees, solved for a target margin — with a calculator and a markup table that shows why 2× materials loses money.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/guides/etsy-pricing-formula/">
+<meta property="og:title" content="Etsy Pricing Formula for Handmade: The Margin Math (2026)">
+<meta property="og:description" content="Why 2× materials loses money, what markup actually hits 30% margin, and a calculator that solves for price.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/guides/etsy-pricing-formula/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is the pricing formula for handmade items on Etsy?","acceptedAnswer":{"@type":"Answer","text":"Price = (materials + packaging + labour + shipping you pay + fixed fees) ÷ (1 − percentage fees − target margin) − shipping you charge. The percentage fees are Etsy's 6.5% transaction fee plus payment processing (US: 3%), so about 9.5% before ads. Fixed fees are the $0.20 listing fee plus the $0.25 card fee."}},
+{"@type":"Question","name":"Why does 2× materials lose money on Etsy?","acceptedAnswer":{"@type":"Answer","text":"Because cost of materials ignores your labour and Etsy's fees. Doubling a $6.50 material cost gives a $13 price; after $7.20 of labour, $6 postage, the listing fee and 9.5% in percentage fees the order is roughly $3 short. Most handmade items need about 4× materials to reach a 30% margin, and the exact multiple depends on your hourly rate."}},
+{"@type":"Question","name":"What profit margin should I aim for on Etsy?","acceptedAnswer":{"@type":"Answer","text":"A common target is 25–40% net margin after all Etsy fees and your own costs. Below 20% there is little room to absorb a refund, a remake or an Offsite Ad order. There is no income guarantee in any of these numbers — they are arithmetic, not a forecast."}},
+{"@type":"Question","name":"Should shipping be in the item price or charged separately?","acceptedAnswer":{"@type":"Answer","text":"For Etsy's fees it makes no difference: the 6.5% transaction fee and payment processing apply to the order total either way. Charge it separately if buyers in your market expect that, or bundle it if free shipping converts better for you."}},
+{"@type":"Question","name":"How do I price for wholesale or a sale?","acceptedAnswer":{"@type":"Answer","text":"Never discount below your break-even price. Solve the same formula with your target margin set to 0% to find break-even, then decide whether a sale price still clears it. Etsy sale events stack on top of every other fee."}}]}</script>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="../../tools/etsy-fees-on-shipping-calculator/">Fees on shipping</a>
+    <a href="../../tools/etsy-offsite-ads-fee-calculator/">Offsite Ads</a>
+    <a href="../../tools/etsy-fees-by-country/">Fees by country</a>
+    <a href="../../demo/seller-profit-sheets/">Etsy calculator</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Etsy pricing formula</p>
+<h1>The Etsy Pricing Formula for Handmade Sellers</h1>
+<p class="sub">Most handmade sellers price by multiplying materials, then wonder where the money went. Labour and Etsy's fees are the two things a materials multiple hides. Here is the formula that puts both back, with a calculator and a table that shows what each markup really earns.</p>
+<p class="updated">Fee rates checked against Etsy's published policy, October 2026.</p>
+
+<div class="answer">
+<p><b>The formula:</b></p>
+<p class="formula" style="margin-top:10px">Price = (materials + packaging + labour + shipping you pay + fixed fees) ÷ (1 − % fees − target margin) − shipping charged</p>
+<p style="margin-top:10px"><b>% fees</b> are Etsy's 6.5% transaction fee plus payment processing (US: 3%), so about <b>9.5%</b> before ads, currency conversion or country surcharges. <b>Fixed fees</b> are the $0.20 listing fee plus the $0.25 card fee — about $0.45 per order that no percentage can cover.</p>
+</div>
+
+<div class="grid">
+<section class="card" aria-label="Inputs">
+  <h2 style="margin-top:0">Your item</h2>
+  <label>Materials per item ($)<input id="mat" type="number" step="0.01" min="0" value="5.00"></label>
+  <label>Packaging per item ($)<input id="pack" type="number" step="0.01" min="0" value="1.50"></label>
+  <label>Time per item (hours)<input id="hrs" type="number" step="0.05" min="0" value="0.4"></label>
+  <label>Your hourly rate ($)<input id="rate" type="number" step="0.5" min="0" value="18"></label>
+  <label>Shipping you pay ($)<input id="shipcost" type="number" step="0.01" min="0" value="6.00"></label>
+  <label>Shipping you charge ($)<input id="ship" type="number" step="0.01" min="0" value="6.00"></label>
+  <label>Target margin of revenue (%)<input id="target" type="number" step="1" min="0" max="80" value="30"></label>
+  <details><summary>Advanced: fee rates</summary>
+    <label>Transaction fee (%)<input id="f_txn" type="number" step="0.1" value="6.5"></label>
+    <label>Processing (%)<input id="f_pp" type="number" step="0.1" value="3"></label>
+    <label>Processing fixed ($)<input id="f_ppf" type="number" step="0.01" value="0.25"></label>
+    <label>Listing fee ($)<input id="f_list" type="number" step="0.01" value="0.20"></label>
+    <label>Offsite Ad sale?<select id="ad"><option value="0">No</option><option value="0.15">Yes (15%)</option><option value="0.12">Yes (12%)</option></select></label>
+    <label>Currency conversion (%)<input id="f_fx" type="number" step="0.1" value="0"></label>
+  </details>
+</section>
+
+<section class="card" aria-live="polite">
+  <h2 style="margin-top:0">Your price</h2>
+  <div class="row"><span>Materials + packaging</span><span id="o_c">$0.00</span></div>
+  <div class="row"><span>Labour</span><span id="o_l"></span></div>
+  <div class="row"><span>Your total cost per item</span><b id="o_cost"></b></div>
+  <div class="row"><span>Percentage fees</span><span id="o_pct"></span></div>
+  <p style="margin:18px 0 0">Charge this for the item</p>
+  <div class="big ok" id="o_price">$0.00</div>
+  <p class="sub" id="o_total"></p>
+  <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+  <div class="row"><span>Buyer pays (with shipping)</span><span id="o_gross"></span></div>
+  <div class="row"><span>Etsy fees on that order</span><span id="o_fees"></span></div>
+  <div class="row"><span>Your costs</span><span id="o_costs"></span></div>
+  <div class="row total"><span>Profit per order</span><span id="o_profit"></span></div>
+  <div class="row"><span>Margin</span><span id="o_margin"></span></div>
+  <div class="row"><span>Break-even price (0% margin)</span><b id="o_be"></b></div>
+</section>
+</div>
+
+<section>
+  <h2>Why "2× materials" loses money</h2>
+  <p class="sub">The table below uses your inputs above. It prices the item at a multiple of materials + packaging only — the way most sellers start — and then applies labour, postage and Etsy's fees honestly.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Price = materials ×</th><th>Item price</th><th>Etsy fees</th><th>Profit</th><th>Margin</th></tr></thead>
+    <tbody id="mkTable"></tbody>
+  </table>
+  </div>
+  <p class="updated">A low multiple is not automatically wrong — it is wrong if you did not know the margin it produces. Note that the multiple needed rises as your hourly rate rises, which is why online "3× materials" rules of thumb disagree with each other.</p>
+</section>
+
+<section>
+  <h2>The five numbers people forget</h2>
+  <ol>
+    <li><b>Labour.</b> If you do not price your own hours, you are donating them. Pick a rate you would pay someone else and keep it in the formula.</li>
+    <li><b>Packaging.</b> Box, tape, tissue, sticker, insert card. Small per item, real across a year.</li>
+    <li><b>The fixed part of fees.</b> $0.20 + $0.25 per order is 4.5% of a $10 item and 0.9% of a $50 one. Cheap items lose to fixed costs — this is why bundles and multi-item listings beat a single cheap SKU.</li>
+    <li><b>Refunds and remakes.</b> A single remake can wipe the margin on several orders. If 3% of your orders get remade, your true margin is lower than the table says.</li>
+    <li><b>Ad-attributed orders.</b> An <a href="../../tools/etsy-offsite-ads-fee-calculator/">Offsite Ad sale adds 15% or 12%</a> on top of everything above. If a meaningful share of your orders come from ads, either price with it in mind or opt out while you are eligible.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Worked example: a $27 candle</h2>
+  <p>Materials and packaging $6.50, 24 minutes of work at $18/hour ($7.20), postage $6.00 charged to the buyer at cost, 30% target margin, no ads:</p>
+  <div class="formula">(6.50 + 7.20 + 6.00 + 0.45) ÷ (1 − 0.095 − 0.30) = 33.31<br>33.31 − 6.00 shipping = <b>$27.31 for the item</b></div>
+  <p>Check it: the buyer pays $33.31. Etsy takes $0.45 + 9.5% = <b>$3.61</b>. Your costs are $19.70. Profit <b>$10.00</b>, which is <b>30.0%</b> of revenue. That is the number the formula was solving for — if you price on instinct and land on $19.99, the same order nets about <b>$1.10</b>.</p>
+  <div class="note">These are arithmetic, not a forecast. Your margins depend on your costs, your market and how often you actually sell — a price that hits 30% on paper still makes $0 if nobody buys.</div>
+</section>
+
+<section>
+  <h2>Questions sellers actually ask</h2>
+  <details open><summary>What is the pricing formula for handmade items on Etsy?</summary><p>Price = (materials + packaging + labour + shipping you pay + fixed fees) ÷ (1 − percentage fees − target margin) − shipping you charge. Percentage fees are about 9.5% in the US before ads; fixed fees are about $0.45 per order.</p></details>
+  <details><summary>What profit margin should I aim for?</summary><p>25–40% net after all fees and your own costs is a common working range. Below 20% a single refund or remake eats the order.</p></details>
+  <details><summary>Should shipping be in the price or charged separately?</summary><p>Etsy's percentage fees are the same either way — see the <a href="../../tools/etsy-fees-on-shipping-calculator/">shipping calculator</a>. Choose based on what converts in your market.</p></details>
+  <details><summary>How do I price for a sale or wholesale?</summary><p>Solve the formula with the target margin at 0% to get break-even, then check that your sale price still clears it. Etsy sale events stack on top of every other fee.</p></details>
+  <details><summary>Does this work for digital products?</summary><p>Yes — set materials, packaging and postage to $0. The fixed fees then dominate, which is why digital products want higher prices or bundles. For that case the <a href="../../tools/digital-product-platform-fees-calculator/">platform fee calculator</a> is a better fit.</p></details>
+</section>
+
+<section class="cta card">
+  <h2>Price 15 products at once, not one at a time</h2>
+  <p>The <b>Etsy Seller Profit Toolkit 2026</b> spreadsheet is this formula applied across your whole catalogue.</p>
+  <ul>
+    <li>Price calculator for 15 products side by side, with target-margin pricing</li>
+    <li>Orders log (500 rows) — fees, profit and margin per order, Offsite Ads aware</li>
+    <li>Monthly dashboard with a revenue-vs-profit chart</li>
+    <li>Inventory tracker with reorder alerts</li>
+    <li>Excel, Google Sheets &amp; Numbers · editable fee rates for any country</li>
+  </ul><br>
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/etsy-profit-toolkit">Get the Toolkit — $12</a>
+  <p class="sub">Instant download · 14-day refund</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../../tools/etsy-fees-on-shipping-calculator/">Is the Etsy fee charged on shipping?<span>The free-shipping trade-off, with numbers</span></a>
+    <a href="../../tools/etsy-offsite-ads-fee-calculator/">Etsy Offsite Ads fee calculator<span>15% vs 12% and the $100 cap</span></a>
+    <a href="../../tools/etsy-fees-by-country/">Etsy fees by country 2026<span>UK, Canada, Australia, EU rates</span></a>
+    <a href="../../">ZeroStore<span>The free kit these tools are built with</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115014483627-What-are-the-Fees-and-Taxes-for-Selling-on-Etsy" rel="nofollow noopener">What are the Fees and Taxes for Selling on Etsy?</a> ($0.20 listing, 6.5% transaction on item + shipping + gift wrap)</li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115015628847-What-are-Payment-Processing-Fees-for-Selling-on-Etsy" rel="nofollow noopener">Payment Processing Fees for Selling on Etsy</a> (US 3% + $0.25)</li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/360000338367-How-Etsy-s-Offsite-Ads-Work" rel="nofollow noopener">How Etsy's Offsite Ads Work</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="../../tools/etsy-offsite-ads-fee-calculator/">Offsite Ads fee calculator</a> ·
+    <a href="../../tools/etsy-fees-on-shipping-calculator/">Fees on shipping</a> ·
+    <a href="../../tools/etsy-fees-by-country/">Fees by country</a> ·
+    <a href="../../tools/shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a> ·
+    <a href="../../tools/digital-product-platform-fees-calculator/">Digital product platforms</a> ·
+    <a href="./">Pricing formula</a> ·
+    <a href="../sell-digital-products-github-pages/">Sell on GitHub Pages</a> ·
+    <a href="../gumroad-license-key-verification-javascript/">Gumroad license keys</a>
+  </p>
+  <p>Estimates only — always confirm rates with Etsy's current Fees &amp; Payments Policy. Rates last checked October 2026. Not affiliated with Etsy, Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var num=function(id){var v=parseFloat($(id).value);return isNaN(v)?0:v;};
+  var money=function(x){return (x<0?"-":"")+"$"+(Math.abs(x)+1e-9).toFixed(2);};
+
+  function solve(){
+    var mat=num('mat'), pack=num('pack');
+    var labour=num('hrs')*num('rate');
+    var shipCost=num('shipcost'), ship=num('ship');
+    var target=num('target')/100;
+    var txn=num('f_txn')/100, pp=num('f_pp')/100, ppf=num('f_ppf'), list=num('f_list');
+    var ad=parseFloat($('ad').value)||0, fx=num('f_fx')/100;
+
+    var pct=txn+pp+ad+fx;
+    var fixed=list+ppf;
+    var base=mat+pack+labour+shipCost+fixed;
+    var denom=1-pct-target;
+
+    $('o_c').textContent=money(mat+pack);
+    $('o_l').textContent=money(labour);
+    $('o_cost').textContent=money(mat+pack+labour);
+    $('o_pct').textContent=(pct*100).toFixed(1)+'% of the order total + '+money(fixed)+' fixed';
+
+    var price, gross, fees, profit, margin;
+    if(denom<=0){
+      $('o_price').textContent='not reachable';
+      $('o_total').textContent='Your target margin plus fees exceed 100% of revenue. Lower the target or the fee rate.';
+      $('o_gross').textContent=$('o_fees').textContent=$('o_costs').textContent=$('o_profit').textContent=$('o_margin').textContent='—';
+      $('o_be').textContent='—';
+      price=null;
+    } else {
+      gross=base/denom;
+      price=gross-ship;
+      fees=fixed+pct*gross;
+      var costs=mat+pack+labour+shipCost;
+      profit=gross-fees-costs;
+      margin=gross?profit/gross*100:0;
+      $('o_price').textContent=money(price);
+      $('o_total').textContent='Buyer pays '+money(price)+' + '+money(ship)+' shipping = '+money(gross);
+      $('o_gross').textContent=money(gross);
+      $('o_fees').textContent=money(fees);
+      $('o_costs').textContent=money(costs);
+      $('o_profit').textContent=money(profit);
+      $('o_profit').style.color=profit>=0?'var(--ok)':'var(--bad)';
+      $('o_margin').textContent=margin.toFixed(1)+'%';
+      $('o_be').textContent=money(base/(1-pct)-ship);
+    }
+
+    // Markup table (materials + packaging only, excluding labour and postage)
+    var c=mat+pack, rows=[], muls=[2,2.5,3,4,5,6];
+    if(c<=0){ $('mkTable').innerHTML='<tr><td colspan="5">Enter a material cost to see the table.</td></tr>'; return; }
+    for(var i=0;i<muls.length;i++){
+      var k=muls[i], p=k*c, g=p+ship;
+      var f=fixed+pct*g;
+      var cost=c+labour+shipCost;
+      var pf=g-f-cost;
+      var mg=g?pf/g*100:0;
+      var cls=pf>=0?'ok':'bad';
+      rows.push('<tr><td>'+k+'×</td><td>'+money(p)+'</td><td>'+money(f)+'</td><td class="'+cls+'"><b>'+money(pf)+'</b></td><td class="'+cls+'">'+mg.toFixed(1)+'%</td></tr>');
+    }
+    $('mkTable').innerHTML=rows.join('');
+  }
+
+  document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',solve);e.addEventListener('change',solve);});
+  solve();
+})();
+</script>
+</body>
+</html>

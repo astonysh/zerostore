@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to Sell Digital Products from GitHub Pages (Free, 2026)</title>
+<meta name="description" content="A step-by-step guide to selling digital products with a storefront hosted free on GitHub Pages: what static hosting can and cannot do, the checkout options, the deploy workflow, SEO setup, and the costs — including GitHub's own hosting limits.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/guides/sell-digital-products-github-pages/">
+<meta property="og:title" content="How to Sell Digital Products from GitHub Pages (Free, 2026)">
+<meta property="og:description" content="Static hosting, hosted checkout, no server. The full walkthrough plus the limits nobody mentions.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/guides/sell-digital-products-github-pages/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Can I sell digital products from GitHub Pages?","acceptedAnswer":{"@type":"Answer","text":"Yes, with a hosted checkout. GitHub Pages serves static files only, so it cannot take a card payment or deliver a file itself. You host the product page there and link the buy button to a checkout on Gumroad, Lemon Squeezy or Payhip, which handles the payment, the file delivery and sales tax."}},
+{"@type":"Question","name":"Is GitHub Pages really free for a storefront?","acceptedAnswer":{"@type":"Answer","text":"Hosting is free. GitHub Free publishes from public repositories; publishing from a private repository needs GitHub Pro or above. The soft limits are a 1 GB published site, 100 GB of bandwidth a month and, for branch-based builds, 10 builds an hour — the last one does not apply if you deploy with a GitHub Actions workflow."}},
+{"@type":"Question","name":"Is selling on GitHub Pages allowed?","acceptedAnswer":{"@type":"Answer","text":"Read GitHub's own terms. Its documentation states that Pages is not intended to be used as free hosting to run an online business, e-commerce site or SaaS. A static page that links out to a checkout hosted elsewhere is a common pattern, but if you want no ambiguity, Cloudflare Pages or Netlify host the same static files on a free tier without that clause, and the storefront files are portable."}},
+{"@type":"Question","name":"Do I need a domain name?","acceptedAnswer":{"@type":"Answer","text":"No. Your site lives at yourname.github.io/repo-name on HTTPS for free. A custom domain costs roughly $10-15 a year and is a one-line DNS change plus a CNAME file in the repository."}},
+{"@type":"Question","name":"How do I stop people sharing the download link?","acceptedAnswer":{"@type":"Answer","text":"You do not host the file, so the problem mostly solves itself: the platform delivers a signed or account-bound link after payment. If you are selling software and want to gate it, use the platform's license keys and verify them — but that needs a server or a proxy, because a static page cannot hold a secret."}}]}</script>
+<style>.step{counter-reset:none}.steps{counter-reset:s;list-style:none;padding:0}
+.steps>li{counter-increment:s;position:relative;padding:0 0 0 46px;margin:0 0 26px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:9px;background:var(--acc);color:#fff;font-weight:700;display:grid;place-items:center;font-size:.95rem}
+.steps h3{margin:2px 0 6px}</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="./" aria-current="page">GitHub Pages guide</a>
+    <a href="../gumroad-license-key-verification-javascript/">License keys</a>
+    <a href="../../tools/digital-product-platform-fees-calculator/">Platform fees</a>
+    <a href="https://github.com/astonysh/zerostore">Free kit</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Sell digital products on GitHub Pages</p>
+<h1>How to Sell Digital Products from GitHub Pages</h1>
+<p class="sub">You can host a real product page on GitHub for $0 and never touch a server. You cannot take a payment there — and knowing exactly where that line is shapes every design decision. Here is the whole thing, including the hosting rules that pages like this one usually leave out.</p>
+<p class="updated">Limits and platform terms checked October 2026.</p>
+
+<div class="answer">
+<p><b>The short version:</b> GitHub Pages serves <b>static files only</b> — no server-side code, no secrets, no card processing. So the pattern is <b>page on Pages, checkout on a merchant-of-record platform</b> (Gumroad, Lemon Squeezy or Payhip). That platform takes the payment, delivers the file, and handles sales tax and VAT. Hosting costs <b>$0</b>; the platform takes a percentage per sale; a custom domain is optional at about $10–15/year.</p>
+</div>
+
+<section>
+  <h2>What static hosting can and cannot do</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Task</th><th>On GitHub Pages?</th><th>Where it happens instead</th></tr></thead>
+    <tbody>
+      <tr><td>Host the product page, images, CSS</td><td class="ok">✓ Yes</td><td>—</td></tr>
+      <tr><td>HTTPS, custom domain, fast CDN</td><td class="ok">✓ Yes</td><td>—</td></tr>
+      <tr><td>Take a card payment</td><td class="bad">✗ No</td><td>Gumroad / Lemon Squeezy / Payhip hosted checkout</td></tr>
+      <tr><td>Deliver the file after purchase</td><td class="bad">✗ No</td><td>The platform (account-bound or signed link)</td></tr>
+      <tr><td>Collect and remit VAT / sales tax</td><td class="bad">✗ No</td><td>The platform, if it is a merchant of record</td></tr>
+      <tr><td>Keep an API key secret</td><td class="bad">✗ No</td><td>Nowhere on Pages — anything in the repo is public</td></tr>
+      <tr><td>Verify a license key at runtime</td><td class="bad">✗ Not directly</td><td>A proxy you run (Cloudflare Worker, Vercel function) or the platform's overlay</td></tr>
+      <tr><td>Host the product file itself</td><td class="ok">Technically, but don't</td><td>A public repo means a public download link — no payment required</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>That last row is the one people get wrong. Putting <code>product.zip</code> in a public repository and selling "access" to it means anyone who finds the repo can download it for free. Sell through the platform's delivery, not through your own repository.</p>
+</section>
+
+<section>
+  <h2>The walkthrough</h2>
+  <ol class="steps">
+    <li>
+      <h3>Create the repository and turn on Pages</h3>
+      <p>Create a GitHub repository, push your files to <code>main</code>, then go to <b>Settings → Pages → Build and deployment → Source: GitHub Actions</b>. If you would rather GitHub build from a branch, choose that instead — the trade-off is in the limits section below.</p>
+      <p>Add an empty <code>.nojekyll</code> file at the repository root if you are serving files straight from a branch. It stops GitHub's Jekyll processor from ignoring directories that start with an underscore.</p>
+    </li>
+    <li>
+      <h3>Get a storefront template — or write one file</h3>
+      <p>A product page needs very little: a headline, what the product is, who it is for, the price, an FAQ and a buy button. The <a href="https://github.com/astonysh/zerostore">ZeroStore kit</a> is a single-file version of that, MIT licensed:</p>
+      <pre><code>npx degit astonysh/zerostore/kit my-store
+cd my-store
+node scripts/build.mjs   # preview: open dist/index.html</code></pre>
+      <p>Or write your own <code>index.html</code>. One file, inline CSS, no framework. It will load in well under a second and there is nothing to break.</p>
+    </li>
+    <li>
+      <h3>Set up the checkout before you set up the page</h3>
+      <p>Pick one platform and create the product there first, so you have a real checkout URL to point at. Gumroad and Payhip start you selling immediately; Lemon Squeezy puts new stores through a short review before live payments. Full instructions are in the kit's <code>docs/payment-setup.md</code>.</p>
+      <p>Then the only thing the page needs is that URL:</p>
+      <pre><code>{
+  "CHECKOUT_URL": "https://yourname.gumroad.com/l/my-product",
+  "checkout_provider": "gumroad"
+}</code></pre>
+      <p><code>gumroad</code> and <code>lemonsqueezy</code> open the checkout as an overlay on your page; <code>payhip</code> and <code>link</code> send the buyer to the platform's own page.</p>
+    </li>
+    <li>
+      <h3>Deploy with a GitHub Actions workflow</h3>
+      <p>The kit ships a workflow that builds the page and publishes it on every push:</p>
+      <pre><code>on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/build.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist }
+      - uses: actions/deploy-pages@v4</code></pre>
+      <p>Push to <code>main</code> and the site is live at <code>https://yourname.github.io/my-store/</code> in under a minute. Using Actions also sidesteps the 10-builds-per-hour limit that applies to branch-based builds.</p>
+    </li>
+    <li>
+      <h3>Add a custom domain (optional)</h3>
+      <p>Buy a domain, add a <code>CNAME</code> record pointing at <code>yourname.github.io</code>, put a file named <code>CNAME</code> containing your bare domain at the root of what you publish, and tick <b>Enforce HTTPS</b> in the Pages settings. Nothing else changes — and if you skip it, <code>yourname.github.io/repo</code> is a perfectly serviceable address.</p>
+    </li>
+    <li>
+      <h3>Do the SEO basics once, properly</h3>
+      <p>These are the things that decide whether search engines can index you at all:</p>
+      <ul>
+        <li><b>A unique <code>&lt;title&gt;</code> and meta description</b> — what you sell, in the words a buyer would type.</li>
+        <li><b>A canonical link</b> to the exact URL: <code>&lt;link rel="canonical" href="https://yourname.github.io/my-store/"&gt;</code>.</li>
+        <li><b>Open Graph tags</b> so the link previews correctly when someone shares it.</li>
+        <li><b>JSON-LD product data</b> — name, price, currency — so search engines understand what the page is.</li>
+        <li><b><code>sitemap.xml</code> and <code>robots.txt</code></b> at the site root, with the sitemap referenced from robots.txt. The kit's build script writes both.</li>
+      </ul>
+      <p>Then submit the sitemap in Google Search Console. Indexing takes days to weeks; there is nothing to tune in the meantime.</p>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2>What it costs</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Line</th><th>Cost</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub Pages hosting</td><td><b>$0</b></td><td>Public repository on GitHub Free</td></tr>
+      <tr><td>Private repository Pages</td><td>~$4/mo</td><td>Needs GitHub Pro or above</td></tr>
+      <tr><td>Custom domain</td><td>~$10–15/yr</td><td>Optional</td></tr>
+      <tr><td>Checkout platform</td><td>% per sale</td><td>Gumroad ~13% + $0.80 direct, Lemon Squeezy 5% + $0.50, Payhip 5%–0% — <a href="../../tools/digital-product-platform-fees-calculator/">run the numbers</a></td></tr>
+      <tr><td>Analytics</td><td>$0</td><td>GoatCounter or Plausible Cloud free tier; the kit wires GoatCounter in one config field</td></tr>
+      <tr><td>Traffic</td><td>Your time or money</td><td>The part that is not free, and the part that decides whether you sell anything</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note"><b>Be honest about the last line.</b> A storefront has never sold anything on its own. GitHub Pages removes your hosting bill, not your need for visitors. Budget for either content that earns search traffic over months, or a community you already belong to — and expect the first month to be quiet either way.</div>
+</section>
+
+<section>
+  <h2>GitHub Pages limits you should know before you commit</h2>
+  <ul>
+    <li><b>1 GB published site</b>, and a recommended 1 GB maximum for the source repository.</li>
+    <li><b>100 GB of bandwidth per month</b> as a soft limit. A text-and-screenshot product page uses a rounding error of that.</li>
+    <li><b>10 builds per hour</b> soft limit for branch-based builds — <i>not</i> applied when you publish with a custom GitHub Actions workflow.</li>
+    <li><b>Deployments time out after 10 minutes</b>, and only one user or organisation site is allowed per account (project sites like <code>yourname.github.io/repo</code> are unlimited).</li>
+    <li><b>GitHub's documentation states Pages is not intended as free hosting to run an online business, an e-commerce site or a SaaS.</b> Read that clause yourself before you build on it. A static page whose buy button links out to a checkout hosted elsewhere is a very common pattern, but it is your call — and if you want zero ambiguity, the same static files run unchanged on Cloudflare Pages or Netlify's free tier.</li>
+  </ul>
+  <p>The limits are soft: GitHub's usual response to a site that exceeds them is to contact the owner and suggest a CDN or another host, not to silently delete your work. Still, treat Pages as excellent free hosting for a marketing site rather than as infrastructure you would bet a business on without a plan B. Keeping the storefront portable is cheap insurance — which is why a template that is just static HTML is worth more than one that depends on a build service.</p>
+</section>
+
+<section>
+  <h2>Questions people actually ask</h2>
+  <details open><summary>Can I sell digital products from GitHub Pages?</summary><p>Yes, with a hosted checkout. Pages hosts the page; Gumroad, Lemon Squeezy or Payhip takes the money and delivers the file.</p></details>
+  <details><summary>Can I keep my repository private?</summary><p>For a storefront, probably not on the free plan — GitHub Pages from a private repository requires GitHub Pro or above. Since a product page is public by definition, a public repository costs you nothing but means never committing secrets or the product file itself.</p></details>
+  <details><summary>How do I take payments from a static page?</summary><p>You link to a hosted checkout. Gumroad and Lemon Squeezy also offer a JavaScript overlay so the buyer never leaves your page, but the card details go to their servers, not yours. See the <a href="../../tools/digital-product-platform-fees-calculator/">platform fee calculator</a> for what each takes.</p></details>
+  <details><summary>Can I add license keys to a static storefront?</summary><p>You can display and store them, but you cannot verify one safely in the browser — a static page cannot hold an API secret, and the license API does not allow direct browser calls. The usual fix is a small proxy function on Cloudflare Workers or Vercel that holds the secret. More in the <a href="../gumroad-license-key-verification-javascript/">Gumroad license key guide</a>.</p></details>
+  <details><summary>What about analytics?</summary><p>Use a privacy-friendly counter such as GoatCounter or Plausible. Google Analytics works but adds a third-party script and a consent question; for a one-page storefront it is usually more than you need.</p></details>
+</section>
+
+<section class="cta card">
+  <h2>Start from a working storefront, not a blank file</h2>
+  <p><b>ZeroStore</b> is the MIT-licensed kit this site runs on: one config file, one build script, one GitHub Actions workflow.</p>
+  <ul>
+    <li>Single-file product page with dark and light themes</li>
+    <li>Gumroad, Lemon Squeezy or Payhip checkout — one config field to switch</li>
+    <li>Actions deploy, sitemap, robots.txt, Open Graph and JSON-LD done</li>
+    <li>Payment setup guide for all three platforms</li>
+    <li><b>Pro ($29)</b> adds 6 agent skills, license-key scripts for Node, Python and the browser, and a launch playbook with 20+ post templates</li>
+  </ul><br>
+  <a class="btn btn-ghost" href="https://github.com/astonysh/zerostore" style="background:var(--card);color:var(--fg);border:1px solid var(--line)">Get the free kit on GitHub</a>
+  &nbsp;
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/zerostore-pro">Get Pro — $29</a>
+  <p class="sub">The kit is free and MIT licensed. Pro is optional.</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../../tools/digital-product-platform-fees-calculator/">Gumroad vs Lemon Squeezy vs Payhip<span>What each takes, calculated</span></a>
+    <a href="../gumroad-license-key-verification-javascript/">Gumroad license key verification<span>Node, browser and the CORS trap</span></a>
+    <a href="../etsy-pricing-formula/">Etsy pricing formula for handmade<span>For a marketplace shop instead of your own site</span></a>
+    <a href="../../">ZeroStore<span>The free kit these tools are built with</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>GitHub Docs — <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits" rel="nofollow noopener">GitHub Pages limits</a> (1 GB site, 100 GB/month bandwidth, 10 builds/hour, deployment timeout, and the statement on commercial use)</li>
+    <li>GitHub Docs — <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site" rel="nofollow noopener">Configuring a custom domain for your GitHub Pages site</a></li>
+    <li>GitHub Docs — <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" rel="nofollow noopener">Creating a GitHub Pages site</a></li>
+    <li>ZeroStore kit — <a href="https://github.com/astonysh/zerostore/blob/main/kit/docs/payment-setup.md" rel="nofollow noopener">payment-setup.md</a> and <a href="https://github.com/astonysh/zerostore/blob/main/kit/README.md" rel="nofollow noopener">README</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="../../tools/etsy-offsite-ads-fee-calculator/">Offsite Ads fee calculator</a> ·
+    <a href="../../tools/etsy-fees-on-shipping-calculator/">Fees on shipping</a> ·
+    <a href="../../tools/etsy-fees-by-country/">Fees by country</a> ·
+    <a href="../../tools/shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a> ·
+    <a href="../../tools/digital-product-platform-fees-calculator/">Digital product platforms</a> ·
+    <a href="../etsy-pricing-formula/">Pricing formula</a> ·
+    <a href="./">Sell on GitHub Pages</a> ·
+    <a href="../gumroad-license-key-verification-javascript/">Gumroad license keys</a>
+  </p>
+  <p>Estimates only — always confirm hosting terms with GitHub and rates with each platform's current pricing page. Checked October 2026. Not affiliated with GitHub, Gumroad, Lemon Squeezy, Payhip or Etsy, Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Is the Etsy Fee Charged on Shipping? Yes — Calculator (2026)</title>
+<meta name="description" content="Etsy charges its 6.5% transaction fee and payment processing on the shipping you charge, not just the item. See how much of your shipping goes to Etsy, and why charging shipping separately and baking it into the price cost the same.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/tools/etsy-fees-on-shipping-calculator/">
+<meta property="og:title" content="Is the Etsy Fee Charged on Shipping? Yes — Calculator (2026)">
+<meta property="og:description" content="How much of your shipping charge Etsy keeps, and the free-shipping trade-off. Free calculator.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/tools/etsy-fees-on-shipping-calculator/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is the Etsy fee charged on shipping?","acceptedAnswer":{"@type":"Answer","text":"Yes. Etsy's 6.5% transaction fee applies to the item price plus the shipping and gift wrap you charge the buyer, and payment processing is charged on that same order total. On a $6.00 shipping charge a US seller pays roughly $0.57 in Etsy fees — about 9.5%."}},
+{"@type":"Question","name":"Does free shipping save me Etsy fees?","acceptedAnswer":{"@type":"Answer","text":"No, if you simply move the shipping cost into the item price. Etsy charges its percentage fees on the order total either way, so a $30 item plus $6 shipping produces exactly the same Etsy bill as a $36 item with free shipping. Free shipping only saves money if the customer pays less in total."}},
+{"@type":"Question","name":"Are Etsy fees charged on gift wrap?","acceptedAnswer":{"@type":"Answer","text":"Yes. Gift wrap you charge for is part of the order total, so it carries the 6.5% transaction fee and payment processing just like shipping does."}},
+{"@type":"Question","name":"Do Etsy fees apply to sales tax?","acceptedAnswer":{"@type":"Answer","text":"No. For US sellers the transaction fee does not apply to sales tax collected by Etsy, and the fee is calculated on the order amount excluding tax."}},
+{"@type":"Question","name":"Does the Offsite Ads fee apply to shipping too?","acceptedAnswer":{"@type":"Answer","text":"Yes. The 15% or 12% Offsite Ads fee is a percentage of the order total including shipping and gift wrap, capped at $100 per order."}}]}</script>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="../etsy-offsite-ads-fee-calculator/">Offsite Ads</a>
+    <a href="./" aria-current="page">Fees on shipping</a>
+    <a href="../etsy-fees-by-country/">Fees by country</a>
+    <a href="../shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Etsy fees on shipping</p>
+<h1>Is the Etsy Fee Charged on Shipping?</h1>
+<p class="sub">Yes — and the size of that bite surprises people. Put a number on it below, then see why "free shipping" does not save you a cent in Etsy fees.</p>
+<p class="updated">Fee rates checked against Etsy's published policy, October 2026.</p>
+
+<div class="answer">
+<p><b>Short answer:</b> Yes. Etsy's <b>6.5% transaction fee</b> is charged on the <b>item price plus the shipping and gift wrap you charge the buyer</b> — not on the item alone. Payment processing (US: <b>3% + $0.25</b>) is charged on the same order total. On a <b>$6.00</b> shipping charge a US seller pays about <b>$0.57</b> to Etsy, roughly <b>9.5%</b>. Etsy does <i>not</i> charge these fees on sales tax it collects for you.</p>
+</div>
+
+<div class="grid">
+<section class="card" aria-label="Inputs">
+  <h2 style="margin-top:0">Your order</h2>
+  <label>Item price ($)<input id="price" type="number" step="0.01" min="0" value="30"></label>
+  <label>Shipping charged to buyer ($)<input id="ship" type="number" step="0.01" min="0" value="6"></label>
+  <label>Gift wrap charged ($)<input id="wrap" type="number" step="0.01" min="0" value="0"></label>
+  <label>What shipping costs you ($)<input id="shipcost" type="number" step="0.01" min="0" value="6.00"></label>
+  <label>Shop revenue in last 365 days<select id="tier"><option value="0">No Offsite Ad</option><option value="0.15">Ad sale (15%)</option><option value="0.12">Ad sale (12%)</option></select></label>
+  <label>Listing fee per item ($)<input id="list" type="number" step="0.01" min="0" value="0.20"></label>
+</section>
+
+<section class="card" aria-live="polite">
+  <h2 style="margin-top:0">What Etsy takes</h2>
+  <div class="row"><span>Order total</span><b id="o_gross">$0.00</b></div>
+  <div class="row"><span>Listing fee</span><span id="o_list"></span></div>
+  <div class="row"><span>Transaction fee (6.5%)</span><span id="o_txn"></span></div>
+  <div class="row"><span>Payment processing (3% + $0.25)</span><span id="o_proc"></span></div>
+  <div class="row"><span>Offsite Ads fee</span><span id="o_ad"></span></div>
+  <div class="row total"><span>Total Etsy fees</span><span id="o_fees"></span></div>
+  <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+  <div class="row"><span>Etsy's cut of the <b>item</b> price</span><span id="o_fee_item"></span></div>
+  <div class="row"><span>Etsy's cut of your <b>shipping</b> charge</span><span id="o_fee_ship"></span></div>
+  <p class="updated" id="o_shipnote" style="margin:6px 0 0"></p>
+  <p style="margin:18px 0 0">You keep</p>
+  <div class="big" id="o_keep">$0.00</div>
+  <p class="sub" id="o_keepnote"></p>
+</section>
+</div>
+
+<section>
+  <h2>Charging shipping vs. "free shipping" — the same bill</h2>
+  <p class="sub">This is the part most sellers get wrong. Because Etsy takes its percentage of the <i>order total</i>, moving the shipping cost into the item price changes nothing about what Etsy charges — as long as the customer pays the same amount overall.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>&nbsp;</th><th>Charge $6 shipping</th><th>Free shipping, $6 in the price</th></tr></thead>
+    <tbody>
+      <tr><td>Item price</td><td>$30.00</td><td>$36.00</td></tr>
+      <tr><td>Shipping charged</td><td>$6.00</td><td>$0.00</td></tr>
+      <tr><td><b>Order total</b></td><td><b>$36.00</b></td><td><b>$36.00</b></td></tr>
+      <tr><td>6.5% transaction fee</td><td>$2.34</td><td>$2.34</td></tr>
+      <tr><td>3% + $0.25 processing</td><td>$1.33</td><td>$1.33</td></tr>
+      <tr><td>Listing fee</td><td>$0.20</td><td>$0.20</td></tr>
+      <tr><td><b>Total Etsy fees</b></td><td><b>$3.87</b></td><td><b>$3.87</b></td></tr>
+      <tr><td><b>You keep</b> (after $6 postage)</td><td><b>$26.13</b></td><td><b>$26.13</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Identical. The only way free shipping reduces your Etsy bill is if the customer pays <i>less</i> in total — for example, you absorb part of the postage instead of adding all of it to the price. That is a margin decision, not a fee-saving one.</p>
+  <div class="note"><b>What free shipping does change:</b> conversion and how your listing is presented. Etsy has run free-shipping programmes in the US market, and buyers filter on it. Test it on your own listings with <a href="../etsy-fees-on-shipping-calculator/">the numbers above</a> before you decide — and remember that "free" shipping is not free, it is prepaid.</div>
+</section>
+
+<section>
+  <h2>Where shipping costs you beyond the fee</h2>
+  <ul>
+    <li><b>You pay postage on the fee-inclusive amount you never received.</b> If you charge $6 and postage is $6, you are even on postage — but Etsy still took $0.57 of the $6, so you are $0.57 down before materials.</li>
+    <li><b>Undercharging shipping is the most common quiet loss.</b> Boxes, tape, padding and the label are real costs. Add them to the shipping charge or to the item price, but put them somewhere.</li>
+    <li><b>International orders can add currency conversion (2.5%) and a higher processing rate.</b> See <a href="../etsy-fees-by-country/">Etsy fees by country</a>.</li>
+    <li><b>Offsite Ad orders stack an extra 15% or 12% on the whole total, shipping included</b> — <a href="../etsy-offsite-ads-fee-calculator/">check that calculator</a> if you get ad-attributed sales.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Questions sellers actually ask</h2>
+  <details open><summary>Is the Etsy fee charged on shipping?</summary><p>Yes. The 6.5% transaction fee applies to item price plus shipping and gift wrap you charge, and payment processing applies to the same order total. A $6.00 shipping charge costs a US seller about $0.57 in Etsy fees.</p></details>
+  <details><summary>Does free shipping save Etsy fees?</summary><p>Not if you move the shipping cost into the price. Etsy's percentage fees are the same on the same order total either way.</p></details>
+  <details><summary>Are gift wrap charges fee'd?</summary><p>Yes — gift wrap you charge for is part of the order total and carries the same 6.5% and processing fees.</p></details>
+  <details><summary>Is Etsy's fee charged on sales tax?</summary><p>No. For US sellers the transaction fee is calculated on the order amount excluding sales tax collected by Etsy.</p></details>
+  <details><summary>What about a shipping label bought through Etsy?</summary><p>Labels bought through Etsy are charged to your payment account at the label price; they are a cost of sale, not an Etsy fee, and they do not earn you a fee credit. Track them as a cost so your profit number is honest.</p></details>
+</section>
+
+<section class="cta card">
+  <h2>Stop guessing what shipping costs you</h2>
+  <p>The <b>Etsy Seller Profit Toolkit 2026</b> spreadsheet rolls shipping, materials and every Etsy fee into one profit number per order.</p>
+  <ul>
+    <li>Orders log (500 rows) — fees, postage, profit and margin per order</li>
+    <li>Price calculator for 15 products, target-margin aware</li>
+    <li>Monthly dashboard with revenue-vs-profit chart</li>
+    <li>Inventory tracker with reorder alerts</li>
+    <li>Excel, Google Sheets &amp; Numbers · editable fee rates</li>
+  </ul><br>
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/etsy-profit-toolkit">Get the Toolkit — $12</a>
+  <p class="sub">Instant download · 14-day refund</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../etsy-offsite-ads-fee-calculator/">Etsy Offsite Ads fee calculator<span>15% vs 12% and the $100 cap</span></a>
+    <a href="../etsy-fees-by-country/">Etsy fees by country 2026<span>UK, Canada, Australia, EU rates</span></a>
+    <a href="../../guides/etsy-pricing-formula/">Etsy pricing formula for handmade<span>Where shipping belongs in your price</span></a>
+    <a href="../../demo/seller-profit-sheets/">Etsy Fee Calculator<span>Full profit + target-margin pricing</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115014483627-What-are-the-Fees-and-Taxes-for-Selling-on-Etsy" rel="nofollow noopener">What are the Fees and Taxes for Selling on Etsy?</a> — the 6.5% transaction fee "applies to shipping and gift wrapping if you charge your customers for them"</li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115015628847-What-are-Payment-Processing-Fees-for-Selling-on-Etsy" rel="nofollow noopener">What are Payment Processing Fees for Selling on Etsy?</a></li>
+    <li>Etsy — <a href="https://www.etsy.com/legal/fees/" rel="nofollow noopener">Fees &amp; Payments Policy</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="../etsy-offsite-ads-fee-calculator/">Offsite Ads fee calculator</a> ·
+    <a href="./">Fees on shipping</a> ·
+    <a href="../etsy-fees-by-country/">Fees by country</a> ·
+    <a href="../shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a> ·
+    <a href="../digital-product-platform-fees-calculator/">Digital product platforms</a> ·
+    <a href="../../guides/etsy-pricing-formula/">Pricing formula</a> ·
+    <a href="../../guides/sell-digital-products-github-pages/">Sell on GitHub Pages</a> ·
+    <a href="../../guides/gumroad-license-key-verification-javascript/">Gumroad license keys</a>
+  </p>
+  <p>Estimates only — always confirm rates with Etsy's current Fees &amp; Payments Policy. Rates last checked October 2026. Not affiliated with Etsy, Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var num=function(id){var v=parseFloat($(id).value);return isNaN(v)?0:v;};
+  var money=function(x){return (x<0?"-":"")+"$"+(Math.abs(x)+1e-9).toFixed(2);};
+  var PPF=0.25, TXN=0.065, PP=0.03;
+
+  function calc(){
+    var price=num('price'), ship=num('ship'), wrap=num('wrap');
+    var gross=price+ship+wrap;
+    var listFee=num('list');
+    var shipCost=num('shipcost');
+    var adRate=parseFloat($('tier').value)||0;
+
+    var txn=gross*TXN;
+    var proc=gross*PP+PPF;
+    var ad=gross*adRate;
+    var fees=listFee+txn+proc+ad;
+
+    // Fee attributable to each portion of the order (listing fee sits on the item)
+    var feeItem=listFee+(price*TXN)+(price*PP);
+    var feeShip=(ship*TXN)+(ship*PP)+(ship*adRate);
+    var feeWrap=(wrap*TXN)+(wrap*PP)+(wrap*adRate);
+
+    $('o_gross').textContent=money(gross);
+    $('o_list').textContent=money(listFee);
+    $('o_txn').textContent=money(txn);
+    $('o_proc').textContent=money(proc);
+    $('o_ad').textContent=adRate?money(ad):'—';
+    $('o_fees').textContent=money(fees)+(gross?' ('+((fees/gross)*100).toFixed(1)+'%)':'');
+    $('o_fee_item').textContent=money(feeItem);
+    $('o_fee_ship').textContent=money(feeShip);
+    $('o_shipnote').textContent = ship>0
+      ? 'Etsy keeps '+money(feeShip)+' of your '+money(ship)+' shipping charge'+(wrap>0?' and '+money(feeWrap)+' of the '+money(wrap)+' gift wrap':'')+'.'
+      : 'No shipping charged on this order, so there is no shipping portion to pay fees on.';
+
+    var keep=gross-fees-shipCost;
+    $('o_keep').textContent=money(keep);
+    $('o_keep').className='big '+(keep>=0?'ok':'bad');
+    $('o_keepnote').textContent = gross
+      ? 'After Etsy fees and '+money(shipCost)+' of postage. Materials and labour not included.'
+      : '';
+  }
+
+  document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',calc);e.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

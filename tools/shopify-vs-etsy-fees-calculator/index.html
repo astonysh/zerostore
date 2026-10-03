@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shopify vs Etsy Fees Calculator 2026 — Break-Even by Order Volume</title>
+<meta name="description" content="Compare what Shopify and Etsy actually cost per month in 2026. Enter your order volume and average order value to see the break-even point, including listing renewals, Offsite Ads, Shopify's plan fee and third-party gateway surcharge.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/tools/shopify-vs-etsy-fees-calculator/">
+<meta property="og:title" content="Shopify vs Etsy Fees Calculator 2026 — Break-Even by Order Volume">
+<meta property="og:description" content="At what monthly order volume does Shopify beat Etsy? Free calculator, no signup.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/tools/shopify-vs-etsy-fees-calculator/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is Shopify cheaper than Etsy in 2026?","acceptedAnswer":{"@type":"Answer","text":"Not at low volume. Etsy has no monthly fee and takes roughly 9.7% plus $0.45 per order. Shopify Basic costs $39 a month plus 2.9% + $0.30 per transaction. At a $50 average order that monthly fee is worth about 11 Etsy orders, so Shopify only wins once you are consistently above roughly that many orders a month."}},
+{"@type":"Question","name":"What does Etsy charge per sale in 2026?","acceptedAnswer":{"@type":"Answer","text":"A $0.20 listing fee, a 6.5% transaction fee on the order total including shipping, and payment processing of 3% + $0.25 in the US. That is about 9.7% plus $0.45, or roughly 10-13% of a typical order, before Offsite Ads."}},
+{"@type":"Question","name":"Does Shopify charge a transaction fee if I use Shopify Payments?","acceptedAnswer":{"@type":"Answer","text":"No. The 2% third-party payment provider fee on the Basic plan only applies if you use a gateway other than Shopify Payments. With Shopify Payments you pay only the card rate, 2.9% + $0.30 on Basic in the US."}},
+{"@type":"Question","name":"What are Shopify's hidden costs compared with Etsy?","acceptedAnswer":{"@type":"Answer","text":"A domain (about $14 a year), apps, a paid theme, email marketing, and the traffic itself. Etsy brings search traffic; a Shopify store brings none, so the comparison is really Etsy's fees versus Shopify's fees plus customer acquisition. Nothing here is a promise of sales on either platform."}},
+{"@type":"Question","name":"Can I use both Etsy and Shopify?","acceptedAnswer":{"@type":"Answer","text":"Yes, and many sellers do. Etsy for discovery, your own store for repeat customers and higher-margin products. Keep one profit sheet for both channels so you can see which orders actually make money."}}]}</script>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="../etsy-offsite-ads-fee-calculator/">Offsite Ads</a>
+    <a href="../etsy-fees-on-shipping-calculator/">Fees on shipping</a>
+    <a href="../etsy-fees-by-country/">Fees by country</a>
+    <a href="./" aria-current="page">Shopify vs Etsy</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Shopify vs Etsy fees</p>
+<h1>Shopify vs Etsy Fees Calculator</h1>
+<p class="sub">Etsy charges nothing monthly and more per sale. Shopify charges monthly and less per sale. Enter your numbers and see which side of that trade you are on — and the exact order volume where it flips.</p>
+<p class="updated">Fee rates checked against Etsy's and Shopify's published pricing, October 2026. US rates.</p>
+
+<div class="answer">
+<p><b>Short answer:</b> Etsy costs roughly <b>9.7% + $0.45 per order</b> and no monthly fee. Shopify Basic costs <b>$39/month</b> plus <b>2.9% + $0.30</b> per transaction. At a <b>$50</b> average order, Etsy's per-sale premium is about <b>$3.45</b>, so Shopify's monthly fee pays for itself at roughly <b>11 orders a month</b>. Below that, Etsy is cheaper; above it, Shopify is — before you count the traffic Etsy brings and the traffic Shopify does not.</p>
+</div>
+
+<div class="grid">
+<section class="card" aria-label="Inputs">
+  <h2 style="margin-top:0">Your shop</h2>
+  <label>Orders per month<input id="orders" type="number" step="1" min="0" value="30"></label>
+  <label>Average order value ($)<input id="aov" type="number" step="0.01" min="0" value="50"></label>
+  <label>Live listings on Etsy<input id="listings" type="number" step="1" min="0" value="25"></label>
+  <label>Offsite Ad share of orders (%)<input id="adshare" type="number" step="1" min="0" max="100" value="0"></label>
+  <label>Ad fee tier<select id="adtier"><option value="0.15">Under $10k/yr (15%)</option><option value="0.12">$10k+/yr (12%)</option></select></label>
+  <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+  <label>Shopify plan<select id="plan">
+    <option value="39|0.029|0.02" selected>Basic — $39/mo, 2.9% + $0.30</option>
+    <option value="105|0.027|0.01">Grow — $105/mo, 2.7% + $0.30</option>
+    <option value="399|0.025|0.006">Advanced — $399/mo, 2.5% + $0.30</option>
+  </select></label>
+  <label>Using a non-Shopify gateway?<select id="gw"><option value="0">No (Shopify Payments)</option><option value="1">Yes (surcharge applies)</option></select></label>
+  <label>Other monthly costs ($)<input id="extra" type="number" step="1" min="0" value="0"></label>
+  <p class="updated">Apps, domain, email. Put 0 to compare platform fees only.</p>
+</section>
+
+<section class="card" aria-live="polite">
+  <h2 style="margin-top:0">Monthly cost</h2>
+  <div class="row"><span>Etsy — fees this month</span><b id="o_etsy"></b></div>
+  <div class="row"><span>Etsy — effective rate</span><span id="o_etsyrate"></span></div>
+  <div class="row"><span>Shopify — this month</span><b id="o_shop"></b></div>
+  <div class="row"><span>Shopify — effective rate</span><span id="o_shoprate"></span></div>
+  <div class="row total"><span id="o_winlabel">Cheaper</span><span id="o_win"></span></div>
+  <p style="margin:18px 0 0">Break-even volume</p>
+  <div class="big" id="o_be">—</div>
+  <p class="sub" id="o_benote"></p>
+</section>
+</div>
+
+<section>
+  <h2>How it changes with volume</h2>
+  <p class="sub">Same inputs, five different order volumes. The monthly fee is why the lines cross.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Orders / month</th><th>Etsy total</th><th>Shopify total</th><th>Cheaper</th><th>Difference</th></tr></thead>
+    <tbody id="volTable"></tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>What each number includes</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Etsy side</h3>
+      <ul>
+        <li>$0.20 listing fee per sale (auto-renew)</li>
+        <li>$0.20 × listings ÷ 4 for listings that renew every four months without selling</li>
+        <li>6.5% transaction fee on the order total, shipping included</li>
+        <li>3% + $0.25 payment processing (US)</li>
+        <li>Offsite Ads: 15% or 12% on the share of orders you say come from ads, capped at $100 per order</li>
+      </ul>
+      <p class="sub">Excludes any Etsy Ads (cost-per-click) spend, which is a marketing line, not a platform fee.</p>
+    </div>
+    <div class="card">
+      <h3>Shopify side</h3>
+      <ul>
+        <li>Monthly plan fee ($39 / $105 / $399, monthly billing)</li>
+        <li>Card rate: 2.9% / 2.7% / 2.5% + $0.30</li>
+        <li>Third-party gateway surcharge — 2% / 1% / 0.6% — only if you do not use Shopify Payments</li>
+        <li>Whatever you enter as other monthly costs</li>
+      </ul>
+      <p class="sub">Excludes the cost of getting traffic. Etsy supplies demand; a Shopify store supplies a checkout.</p>
+    </div>
+  </div>
+  <div class="note"><b>The comparison everyone forgets:</b> Etsy's fees are buying you access to shoppers searching for what you sell. Shopify's fees buy you a checkout and a website — not visitors. A store with no traffic costs $39 a month and sells nothing. Put that in the "other monthly costs" box as ad spend if you want a truer picture.</div>
+</section>
+
+<section>
+  <h2>Costs the fee tables leave out</h2>
+  <ul>
+    <li><b>Etsy: listings that never sell still renew.</b> Every listing costs $0.20 every four months whether or not anyone buys it. 100 live listings is about $5 a month, sold or not.</li>
+    <li><b>Etsy: Offsite Ads are not optional once you pass $10,000.</b> Shops below the threshold can opt out; above it, participation is required for the life of the shop.</li>
+    <li><b>Shopify: apps add up faster than the plan fee.</b> Reviews, email, bundles, subscriptions — $20–$60 a month is ordinary, and most apps bill by store not by order.</li>
+    <li><b>Shopify: annual billing cuts the plan fee</b> ($29/month effective on Basic) at the cost of paying upfront.</li>
+    <li><b>Both: refunds, chargebacks and remakes.</b> Neither platform's fee table is where those show up. They show up in your profit sheet.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Questions sellers actually ask</h2>
+  <details open><summary>Is Shopify cheaper than Etsy?</summary><p>Only above a certain volume. At a $50 average order, Shopify Basic's $39 monthly fee is worth about 11 Etsy orders. Below roughly that many orders a month, Etsy is cheaper.</p></details>
+  <details><summary>Does Shopify charge a transaction fee?</summary><p>Not with Shopify Payments — you pay only the card rate. The 2% surcharge on Basic applies only if you use a different gateway.</p></details>
+  <details><summary>Should I leave Etsy for Shopify?</summary><p>Only if you already have, or can buy, your own traffic. Moving an Etsy shop to Shopify usually means trading fees for marketing spend; the fee saving is often smaller than the traffic loss. Many sellers run both.</p></details>
+  <details><summary>Which platform is better for handmade?</summary><p>Etsy brings buyers who are already shopping handmade; Shopify gives you more control and a better margin on repeat customers. Neither guarantees sales — that depends on your product and your marketing.</p></details>
+  <details><summary>What about Etsy's other costs?</summary><p>See the <a href="../etsy-fees-by-country/">fees by country calculator</a> for non-US processing rates and the <a href="../etsy-offsite-ads-fee-calculator/">Offsite Ads calculator</a> for the ad fee in detail.</p></details>
+</section>
+
+<section class="cta card">
+  <h2>Run both channels without losing track</h2>
+  <p>The <b>Etsy Seller Profit Toolkit 2026</b> spreadsheet calculates profit per order with editable fee rates — including a Shopify column, so you can compare the two honestly.</p>
+  <ul>
+    <li>Orders log (500 rows) — fees, profit and margin per order</li>
+    <li>Editable fee rates for Etsy, Shopify or any other channel</li>
+    <li>Price calculator for 15 products with target-margin pricing</li>
+    <li>Monthly dashboard with a revenue-vs-profit chart</li>
+    <li>Excel, Google Sheets &amp; Numbers</li>
+  </ul><br>
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/etsy-profit-toolkit">Get the Toolkit — $12</a>
+  <p class="sub">Instant download · 14-day refund</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../etsy-offsite-ads-fee-calculator/">Etsy Offsite Ads fee calculator<span>15% vs 12% and the $100 cap</span></a>
+    <a href="../etsy-fees-by-country/">Etsy fees by country 2026<span>UK, Canada, Australia, EU rates</span></a>
+    <a href="../../guides/etsy-pricing-formula/">Etsy pricing formula for handmade<span>Turn fees into a price</span></a>
+    <a href="../../">ZeroStore<span>The free kit these tools are built with</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>Shopify — <a href="https://www.shopify.com/pricing" rel="nofollow noopener">Plans &amp; pricing</a> (Basic $39, Grow $105, Advanced $399; card rates 2.9% / 2.7% / 2.5% + $0.30; third-party provider fees 2% / 1% / 0.6% — US, monthly billing)</li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115014483627-What-are-the-Fees-and-Taxes-for-Selling-on-Etsy" rel="nofollow noopener">What are the Fees and Taxes for Selling on Etsy?</a></li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115015628847-What-are-Payment-Processing-Fees-for-Selling-on-Etsy" rel="nofollow noopener">Payment Processing Fees</a></li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/360000338367-How-Etsy-s-Offsite-Ads-Work" rel="nofollow noopener">How Etsy's Offsite Ads Work</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="../etsy-offsite-ads-fee-calculator/">Offsite Ads fee calculator</a> ·
+    <a href="../etsy-fees-on-shipping-calculator/">Fees on shipping</a> ·
+    <a href="../etsy-fees-by-country/">Fees by country</a> ·
+    <a href="./">Shopify vs Etsy</a> ·
+    <a href="../digital-product-platform-fees-calculator/">Digital product platforms</a> ·
+    <a href="../../guides/etsy-pricing-formula/">Pricing formula</a> ·
+    <a href="../../guides/sell-digital-products-github-pages/">Sell on GitHub Pages</a> ·
+    <a href="../../guides/gumroad-license-key-verification-javascript/">Gumroad license keys</a>
+  </p>
+  <p>Estimates only — always confirm rates with Etsy's and Shopify's current published pricing. Rates last checked October 2026. Not affiliated with Etsy, Inc. or Shopify Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var num=function(id){var v=parseFloat($(id).value);return isNaN(v)?0:v;};
+  var money=function(x){return (x<0?"-":"")+"$"+(Math.abs(x)+1e-9).toFixed(2);};
+
+  function model(orders){
+    var aov=num('aov'), listings=num('listings');
+    var adShare=num('adshare')/100, adRate=parseFloat($('adtier').value);
+    var p=$('plan').value.split('|');
+    var plan=parseFloat(p[0]), card=parseFloat(p[1]), gwFee=parseFloat(p[2]);
+    var useGw=$('gw').value==='1';
+    var extra=num('extra');
+
+    var renewals=listings*0.20/4;
+    var etsyPerOrder=0.20+0.065*aov+0.03*aov+0.25;
+    var etsyAd=orders*adShare*adRate*aov;
+    var etsy=renewals+orders*etsyPerOrder+etsyAd;
+
+    var shopVar=(card+(useGw?gwFee:0))*aov+0.30;
+    var shop=plan+extra+orders*shopVar;
+
+    return {etsy:etsy,shop:shop,renewals:renewals,etsyVar:0.45+0.095*aov+adShare*adRate*aov,shopVar:shopVar,etsyFixed:renewals,shopFixed:plan+extra};
+  }
+
+  function calc(){
+    var orders=Math.max(0,num('orders'));
+    var aov=num('aov');
+    var r=model(orders);
+    var revenue=orders*aov;
+
+    $('o_etsy').textContent=money(r.etsy);
+    $('o_shop').textContent=money(r.shop);
+    $('o_etsyrate').textContent=revenue?((r.etsy/revenue)*100).toFixed(1)+'% of revenue':'—';
+    $('o_shoprate').textContent=revenue?((r.shop/revenue)*100).toFixed(1)+'% of revenue':'—';
+
+    var diff=r.etsy-r.shop;
+    if(Math.abs(diff)<0.005){
+      $('o_winlabel').textContent='Cheaper';
+      $('o_win').textContent='a dead heat';
+      $('o_win').style.color='';
+    } else {
+      $('o_winlabel').textContent='Cheaper this month';
+      $('o_win').textContent=(diff>0?'Etsy':'Shopify')+' by '+money(Math.abs(diff));
+      $('o_win').style.color=(diff>0?'var(--ok)':'var(--bad)');
+    }
+
+    // break-even
+    var denom=r.etsyVar-r.shopVar;
+    if(aov<=0){
+      $('o_be').textContent='—';
+      $('o_benote').textContent='Enter an average order value to find the break-even.';
+    } else if(denom<=0){
+      $('o_be').textContent='Shopify never';
+      $('o_benote').textContent='On these numbers Shopify costs more per sale as well as per month — usually because the average order value is small relative to the fixed card fee.';
+    } else {
+      var be=(r.shopFixed-r.etsyFixed)/denom;
+      if(be<=0){
+        $('o_be').textContent='from the first order';
+        $('o_benote').textContent='At this average order value Shopify is already cheaper per order, so its monthly fee is covered immediately.';
+      } else {
+        $('o_be').textContent=Math.ceil(be)+' orders / month';
+        $('o_benote').textContent='At a '+money(aov)+' average order and '+money(r.shopFixed)+' of fixed monthly cost, Shopify is cheaper from about '+Math.ceil(be)+' orders a month upward. Below that, Etsy is.';
+      }
+    }
+
+    // volume table
+    var vols=[5,15,30,60,120], rows=[];
+    for(var i=0;i<vols.length;i++){
+      var m=model(vols[i]);
+      var d=m.etsy-m.shop;
+      var who=Math.abs(d)<0.005?'Even':(d>0?'Etsy':'Shopify');
+      rows.push('<tr><td>'+vols[i]+'</td><td>'+money(m.etsy)+'</td><td>'+money(m.shop)+'</td><td>'+who+'</td><td>'+money(Math.abs(d))+'</td></tr>');
+    }
+    $('volTable').innerHTML=rows.join('');
+  }
+
+  document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',calc);e.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

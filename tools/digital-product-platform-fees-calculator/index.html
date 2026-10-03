@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gumroad vs Lemon Squeezy vs Payhip Fees 2026 — Calculator</title>
+<meta name="description" content="Compare Gumroad, Lemon Squeezy and Payhip fees for 2026 side by side. Enter your price and monthly sales to see what you actually keep after the platform cut, card processing and international or PayPal surcharges.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/tools/digital-product-platform-fees-calculator/">
+<meta property="og:title" content="Gumroad vs Lemon Squeezy vs Payhip Fees 2026 — Calculator">
+<meta property="og:description" content="What you actually keep on each platform, after every fee. Free, no signup.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/tools/digital-product-platform-fees-calculator/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Which is cheaper in 2026: Gumroad, Lemon Squeezy or Payhip?","acceptedAnswer":{"@type":"Answer","text":"It depends on price and volume. Lemon Squeezy charges a flat 5% + $0.50 and is a merchant of record. Gumroad charges 10% + $0.50 plus card processing, so roughly 13% + $0.80 in total, but drops to 5% + $0.50 on direct sales in any month you pass $20,000. Payhip takes 5% on its free plan, 2% on the $29/month Plus plan and 0% on the $99/month Pro plan, and you pay Stripe or PayPal processing separately. Lemon Squeezy wins at most price points unless you are on Payhip Pro or a high-volume Gumroad month."}},
+{"@type":"Question","name":"Does Gumroad charge payment processing on top of its 10%?","acceptedAnswer":{"@type":"Answer","text":"Yes, on direct sales. Gumroad takes 10% + $0.50 and Stripe charges about 2.9% + $0.30 for cards or 3.49% + $0.49 for PayPal on top. On a $30 card sale that is $3.50 to Gumroad plus $1.17 in processing. Discover sales are different: 30% flat, processing included."}},
+{"@type":"Question","name":"What is a merchant of record and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"A merchant of record is legally the seller, so it collects and remits sales tax and VAT worldwide on your behalf. Gumroad and Lemon Squeezy are merchants of record. Payhip handles EU and UK VAT on digital goods but leaves other tax obligations with you. If you are not a merchant of record, tax compliance is your problem."}},
+{"@type":"Question","name":"Why does a $0.50 flat fee matter so much?","acceptedAnswer":{"@type":"Answer","text":"Because it does not scale down. On a $5 product, Gumroad's $0.50 is 10% of the price on its own, before the percentage fee or processing. On a $100 product it is 0.5%. Very cheap products are dominated by flat fees on every platform, which is why bundles and higher price points usually win."}},
+{"@type":"Question","name":"Do any of these platforms bring me customers?","acceptedAnswer":{"@type":"Answer","text":"Gumroad Discover can, and it charges 30% for marketplace sales instead of the direct rate. Lemon Squeezy and Payhip do not bring buyers; you bring your own traffic. Assume you are responsible for getting visitors."}}]}</script>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="../../guides/sell-digital-products-github-pages/">Sell on GitHub Pages</a>
+    <a href="../../guides/gumroad-license-key-verification-javascript/">License keys</a>
+    <a href="../etsy-fees-by-country/">Etsy fees</a>
+    <a href="../../">Free kit</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Digital product platform fees</p>
+<h1>Gumroad vs Lemon Squeezy vs Payhip Fees</h1>
+<p class="sub">The headline rate is not what you pay. Enter your price and volume and see what lands in your account on each platform — including the processing fees Gumroad charges on top, and the surcharges that only apply to some buyers.</p>
+<p class="updated">Fee rates checked against each platform's published pricing, October 2026.</p>
+
+<div class="answer">
+<p><b>Short answer:</b> <b>Gumroad</b> takes <b>10% + $0.50</b> on direct sales <i>plus</i> card processing (about 2.9% + $0.30) — roughly 13% + $0.80 all in — and <b>30% flat</b> on Discover sales. <b>Lemon Squeezy</b> takes <b>5% + $0.50</b> all in, plus 1.5% for international cards or PayPal. <b>Payhip</b> takes <b>5%</b> on the free plan, <b>2%</b> on Plus ($29/mo) or <b>0%</b> on Pro ($99/mo), and you pay your own Stripe or PayPal fees on top. All three are one-time-fee, no-monthly-cost on their entry plans — except Payhip Plus and Pro.</p>
+</div>
+
+<div class="grid">
+<section class="card" aria-label="Inputs">
+  <h2 style="margin-top:0">Your product</h2>
+  <label>Price per sale ($)<input id="price" type="number" step="0.01" min="0" value="29"></label>
+  <label>Sales per month<input id="sales" type="number" step="1" min="0" value="40"></label>
+  <label>Buyers outside your country (%)<input id="intl" type="number" step="1" min="0" max="100" value="30"></label>
+  <label>Buyers paying with PayPal (%)<input id="pp" type="number" step="1" min="0" max="100" value="20"></label>
+  <label>Sales from Gumroad Discover (%)<input id="discover" type="number" step="1" min="0" max="100" value="0"></label>
+  <label>Payhip plan<select id="payhip">
+    <option value="5|0">Free — 5% per sale</option>
+    <option value="2|29">Plus — $29/mo, 2% per sale</option>
+    <option value="0|99">Pro — $99/mo, 0% per sale</option>
+  </select></label>
+  <p class="updated">Discover is Gumroad's marketplace; it charges 30% and includes processing. The other platforms do not bring buyers.</p>
+</section>
+
+<section class="card" aria-live="polite">
+  <h2 style="margin-top:0">What you keep</h2>
+  <div class="row"><span>Gross revenue / month</span><b id="o_rev">$0.00</b></div>
+  <div class="row"><span>Gumroad</span><b id="o_gum"></b></div>
+  <div class="row"><span>Lemon Squeezy</span><b id="o_ls"></b></div>
+  <div class="row"><span id="o_php_label">Payhip</span><b id="o_php"></b></div>
+  <div class="row"><span>Etsy (digital download, US)</span><b id="o_etsy"></b></div>
+  <p style="margin:18px 0 0">Best net this month</p>
+  <div class="big ok" id="o_best">—</div>
+  <p class="sub" id="o_bestnote"></p>
+</section>
+</div>
+
+<section>
+  <h2>Full breakdown</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Platform</th><th>Platform fee</th><th>Processing</th><th>You keep / month</th><th>Per sale</th><th>Effective rate</th></tr></thead>
+    <tbody id="grid"></tbody>
+  </table>
+  </div>
+  <p class="updated">Etsy included for reference — digital downloads on Etsy still pay the listing fee, 6.5% transaction fee and payment processing, but no shipping and no postage.</p>
+</section>
+
+<section>
+  <h2>The rates, with what they include</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Platform</th><th>Direct / own traffic</th><th>Marketplace</th><th>Processing included?</th><th>Merchant of record</th></tr></thead>
+    <tbody>
+      <tr><td><b>Gumroad</b></td><td>10% + $0.50 <span class="mut">(5% + $0.50 on direct sales in any month you pass $20,000)</span></td><td>Discover: 30% flat</td><td>No — Stripe on top (≈2.9% + $0.30 cards, 3.49% + $0.49 PayPal)</td><td>Yes</td></tr>
+      <tr><td><b>Lemon Squeezy</b></td><td>5% + $0.50</td><td>—</td><td>Yes, included</td><td>Yes</td></tr>
+      <tr><td><b>Payhip</b></td><td>5% free / 2% Plus ($29/mo) / 0% Pro ($99/mo)</td><td>Has a marketplace; check current terms</td><td>No — your Stripe or PayPal account</td><td>No (handles EU/UK VAT on digital goods)</td></tr>
+      <tr><td><b>Etsy</b> <span class="mut">(digital)</span></td><td>$0.20 + 6.5% + 3% + $0.25</td><td>Etsy search itself</td><td>Included in the processing fee</td><td>Yes, for collected sales tax</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="updated">Surcharges to add on top of Lemon Squeezy's 5% + $0.50: +1.5% international cards, +1.5% PayPal, +0.5% subscriptions, +3% affiliate-referred. Payout fees also differ — non-US bank payouts through Stripe cost 1%, international PayPal payouts 3% capped at $30.</p>
+</section>
+
+<section>
+  <h2>Three things the headline rates hide</h2>
+  <h3>1. The flat fee is a percentage that grows as your price falls</h3>
+  <p>$0.50 is 0.5% of a $100 product and <b>10%</b> of a $5 one. On a $5 sale Gumroad's flat fee alone matches its percentage fee, and Lemon Squeezy's is double it. Cheap products are structurally disadvantaged on every platform here — the fix is price, bundling, or both, not platform shopping.</p>
+  <h3>2. Processing is only "included" where the platform says so</h3>
+  <p>Lemon Squeezy's 5% + $0.50 is the whole cost. Gumroad's 10% + $0.50 is not: card processing is billed separately, which is why the calculator above applies it and why Gumroad usually shows up third on a $29 product. Payhip is in the same position as Gumroad — the platform fee is not the whole story.</p>
+  <h3>3. Marketplace sales are a different product</h3>
+  <p>Gumroad's Discover charges <b>30% flat</b> but includes processing and can bring buyers you would not otherwise have. Treat it as a customer-acquisition cost, not a fee: if a Discover sale costs 30% but is a customer you could not reach, it may still be the cheapest sale you make that month. Nothing here promises sales — Discover lists a product only after the account has real sales and passes review.</p>
+</section>
+
+<section>
+  <h2>Which should you pick?</h2>
+  <ul>
+    <li><b>Starting out, own traffic only:</b> Lemon Squeezy, unless you are on Payhip Pro or expect a high-volume Gumroad month.</li>
+    <li><b>Cheap product under about $10:</b> raise the price or bundle. No platform fixes a flat fee that is 10% of your price.</li>
+    <li><b>Want a marketplace to find buyers:</b> Gumroad, and accept the 30% on those sales.</li>
+    <li><b>Already have a Stripe account and volume:</b> Payhip Pro's 0% platform fee becomes interesting once 2% of your revenue exceeds $99 a month — that is $4,950/month in sales on the Plus plan.</li>
+    <li><b>Selling on Etsy already:</b> adding a digital download to an existing Etsy shop costs you nothing extra to try.</li>
+  </ul>
+  <div class="note">All three platforms are switchable from the same page: the <a href="https://github.com/astonysh/zerostore">ZeroStore kit</a> changes checkout provider with one field in <code>config.json</code>, so you are not locked in by your site. Tax and payout rules differ by country — check each platform's payout settings before you commit.</div>
+</section>
+
+<section>
+  <h2>Questions sellers actually ask</h2>
+  <details open><summary>Which is cheapest in 2026?</summary><p>On a $29 product with own traffic, Lemon Squeezy at 5% + $0.50 is usually lowest. Payhip Pro beats it above about $4,950/month in sales. Gumroad's direct rate is the highest of the three because processing is charged on top.</p></details>
+  <details><summary>Does Gumroad charge processing on top of 10%?</summary><p>Yes, on direct sales. Discover sales are 30% flat with processing included.</p></details>
+  <details><summary>What is a merchant of record?</summary><p>The party legally selling to the buyer, responsible for collecting and remitting sales tax and VAT. Gumroad and Lemon Squeezy are merchants of record; Payhip is not, though it handles EU/UK VAT on digital goods.</p></details>
+  <details><summary>Can I build my own storefront instead?</summary><p>Yes, and you can still use any of these three as the checkout — which is exactly what the <a href="../../guides/sell-digital-products-github-pages/">ZeroStore kit</a> does. A static storefront on GitHub Pages costs nothing to host and you keep the platform you prefer.</p></details>
+  <details><summary>Do I need license keys?</summary><p>Only if you are selling software. Gumroad has a verification API — see the <a href="../../guides/gumroad-license-key-verification-javascript/">JavaScript guide</a> — and Lemon Squeezy and Payhip both issue keys too.</p></details>
+</section>
+
+<section class="cta card">
+  <h2>Ship the storefront for free, keep any checkout</h2>
+  <p><b>ZeroStore</b> is an open-source, single-file storefront for digital products that deploys to GitHub Pages. No domain, no server, no monthly fee.</p>
+  <ul>
+    <li>One <code>config.json</code> for name, price, copy and checkout</li>
+    <li>Gumroad, Lemon Squeezy or Payhip — switch with one field</li>
+    <li>GitHub Actions deploy, sitemap, robots.txt, Open Graph, JSON-LD</li>
+    <li>MIT licensed — the kit is free, and always will be</li>
+    <li><b>Pro ($29)</b> adds 6 agent skills, license-key scripts for Node, Python and the browser, and a launch playbook</li>
+  </ul><br>
+  <a class="btn btn-ghost" href="https://github.com/astonysh/zerostore" style="background:var(--card);color:var(--fg);border:1px solid var(--line)">Get the free kit on GitHub</a>
+  &nbsp;
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/zerostore-pro">Get Pro — $29</a>
+  <p class="sub">The kit is free and MIT licensed. Pro is optional.</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../../guides/sell-digital-products-github-pages/">Sell digital products from GitHub Pages<span>The free storefront, step by step</span></a>
+    <a href="../../guides/gumroad-license-key-verification-javascript/">Gumroad license key verification<span>Node, browser and the CORS trap</span></a>
+    <a href="../etsy-fees-by-country/">Etsy fees by country 2026<span>UK, Canada, Australia, EU rates</span></a>
+    <a href="../../">ZeroStore<span>The free kit these tools are built with</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>Gumroad — <a href="https://gumroad.com/pricing" rel="nofollow noopener">Pricing</a> (10% + $0.50 direct, 30% Discover, 5% + $0.50 above $20,000/month)</li>
+    <li>Lemon Squeezy — <a href="https://docs.lemonsqueezy.com/help/getting-started/fees" rel="nofollow noopener">Fees</a> (5% + $0.50; +1.5% international, +1.5% PayPal, +0.5% subscriptions, +3% affiliate)</li>
+    <li>Payhip — <a href="https://payhip.com/pricing" rel="nofollow noopener">Pricing</a> (Free 5%, Plus $29/mo 2%, Pro $99/mo 0%)</li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115014483627-What-are-the-Fees-and-Taxes-for-Selling-on-Etsy" rel="nofollow noopener">What are the Fees and Taxes for Selling on Etsy?</a></li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="../etsy-offsite-ads-fee-calculator/">Offsite Ads fee calculator</a> ·
+    <a href="../etsy-fees-on-shipping-calculator/">Fees on shipping</a> ·
+    <a href="../etsy-fees-by-country/">Fees by country</a> ·
+    <a href="../shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a> ·
+    <a href="./">Digital product platforms</a> ·
+    <a href="../../guides/etsy-pricing-formula/">Pricing formula</a> ·
+    <a href="../../guides/sell-digital-products-github-pages/">Sell on GitHub Pages</a> ·
+    <a href="../../guides/gumroad-license-key-verification-javascript/">Gumroad license keys</a>
+  </p>
+  <p>Estimates only — always confirm rates on each platform's current pricing page. Rates last checked October 2026. Not affiliated with Gumroad, Lemon Squeezy, Payhip or Etsy, Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var num=function(id){var v=parseFloat($(id).value);return isNaN(v)?0:v;};
+  var money=function(x){return (x<0?"-":"")+"$"+(Math.abs(x)+1e-9).toFixed(2);};
+
+  function calc(){
+    var price=num('price'), sales=Math.max(0,Math.round(num('sales')));
+    var intl=num('intl')/100, ppShare=num('pp')/100;
+    var cardShare=Math.max(0,1-ppShare);
+    var discover=num('discover')/100;
+    var p=$('payhip').value.split('|');
+    var phpRate=parseFloat(p[0])/100, phpPlan=parseFloat(p[1]);
+
+    var revenue=price*sales;
+
+    // --- Gumroad ---
+    var dSales=sales*(1-discover);
+    var dRev=dSales*price;
+    var rate=dRev>20000?0.05:0.10;
+    var gumFee=dRev*rate+dSales*0.50;
+    var gumProc=dRev*(cardShare*0.029+ppShare*0.0349)+dSales*(cardShare*0.30+ppShare*0.49);
+    var discRev=revenue-dRev;
+    var gumNet=dRev-gumFee-gumProc+discRev*0.70;
+
+    // --- Lemon Squeezy ---
+    var lsFee=revenue*0.05+sales*0.50;
+    var lsSur=revenue*intl*0.015+revenue*ppShare*0.015;
+    var lsNet=revenue-lsFee-lsSur;
+
+    // --- Payhip ---
+    var phpFee=revenue*phpRate;
+    var phpProc=revenue*0.029+sales*0.30;
+    var phpNet=revenue-phpFee-phpProc-phpPlan;
+
+    // --- Etsy digital (US) ---
+    var etsyFee=sales*0.20+revenue*0.065+revenue*0.03+sales*0.25;
+    var etsyNet=revenue-etsyFee;
+
+    var rows=[
+      {name:'Gumroad', net:gumNet, fee:gumFee, proc:gumProc},
+      {name:'Lemon Squeezy', net:lsNet, fee:lsFee, proc:lsSur},
+      {name:'Payhip'+(phpPlan?' ('+(phpRate*100).toFixed(0)+'% + $'+phpPlan+'/mo)':' (Free)'), net:phpNet, fee:phpFee, proc:phpProc+phpPlan},
+      {name:'Etsy (digital)', net:etsyNet, fee:etsyFee-sales*0.20, proc:0}
+    ];
+
+    $('o_rev').textContent=money(revenue);
+    $('o_gum').textContent=money(gumNet);
+    $('o_ls').textContent=money(lsNet);
+    $('o_php_label').textContent='Payhip'+(phpPlan?' (+ $'+phpPlan+'/mo)':' (Free plan)');
+    $('o_php').textContent=money(phpNet);
+    $('o_etsy').textContent=money(etsyNet);
+
+    var best=rows[0];
+    for(var i=1;i<rows.length;i++){ if(rows[i].net>best.net) best=rows[i]; }
+    $('o_best').textContent=best.name+' — '+money(best.net);
+    var perSale=sales?best.net/sales:0;
+    $('o_bestnote').textContent = sales
+      ? 'That is '+money(perSale)+' per sale on a '+money(price)+' product. Effective rate '+(((revenue-best.net)/revenue)*100).toFixed(1)+'%.'
+      : 'Enter sales per month to compare.';
+
+    var html='';
+    for(var j=0;j<rows.length;j++){
+      var r=rows[j];
+      var eff=revenue?(((revenue-r.net)/revenue)*100).toFixed(1)+'%':'—';
+      var cls=r===best?'ok':'';
+      html+='<tr><td><b>'+r.name+'</b></td><td>'+money(r.fee)+'</td><td>'+money(r.proc)+'</td>'
+          + '<td class="'+cls+'"><b>'+money(r.net)+'</b></td>'
+          + '<td>'+(sales?money(r.net/sales):'—')+'</td><td>'+eff+'</td></tr>';
+    }
+    $('grid').innerHTML=html;
+  }
+
+  document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',calc);e.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

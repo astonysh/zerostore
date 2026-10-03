@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etsy Offsite Ads Fee Calculator 2026 — 15% vs 12% and the $100 Cap</title>
+<meta name="description" content="Free Etsy Offsite Ads fee calculator for 2026. See the 15% or 12% ad fee on an order total, when the $100 per-order cap kicks in, and what you keep with and without an attributed sale.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/tools/etsy-offsite-ads-fee-calculator/">
+<meta property="og:title" content="Etsy Offsite Ads Fee Calculator 2026 — 15% vs 12% and the $100 Cap">
+<meta property="og:description" content="See the real cost of an Offsite Ad sale: fee, cap, and what you keep. Free, no signup.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/tools/etsy-offsite-ads-fee-calculator/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How much is the Etsy Offsite Ads fee in 2026?","acceptedAnswer":{"@type":"Answer","text":"15% of the attributed order total if your shop made under $10,000 USD in any consecutive 365-day period, or 12% if it made $10,000 USD or more. The fee never exceeds $100 USD per order."}},
+{"@type":"Question","name":"When does the $100 Offsite Ads cap apply?","acceptedAnswer":{"@type":"Answer","text":"The fee is capped at $100 per order. At the 15% rate the cap starts to apply on orders over $666.67; at the 12% rate, on orders over $833.33."}},
+{"@type":"Question","name":"Can I opt out of Etsy Offsite Ads?","acceptedAnswer":{"@type":"Answer","text":"Shops that have never made $10,000 USD in a 365-day period can opt out in Shop Manager under Settings, then Offsite Ads. Once a shop reaches $10,000 USD in Etsy sales in a 365-day period, participation is required for the lifetime of the shop and the rate drops to 12%."}},
+{"@type":"Question","name":"Is the Offsite Ads fee charged instead of Etsy's other fees?","acceptedAnswer":{"@type":"Answer","text":"No. It is charged in addition to the $0.20 listing fee, the 6.5% transaction fee and payment processing. On an attributed order the combined fees can pass 25% of the order total."}},
+{"@type":"Question","name":"How does Etsy decide an order came from an Offsite Ad?","acceptedAnswer":{"@type":"Answer","text":"If a buyer clicks one of Etsy's ads on Google, Facebook, Instagram, TikTok, Pinterest or an affiliate site and buys from your shop within 30 days, the order is attributed to Offsite Ads. The buyer does not have to purchase the item shown in the ad, and a single ad click can lead to more than one attributed order."}}]}</script>
+<style>.cmp{margin-top:6px}</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="./" aria-current="page">Offsite Ads</a>
+    <a href="../etsy-fees-on-shipping-calculator/">Fees on shipping</a>
+    <a href="../etsy-fees-by-country/">Fees by country</a>
+    <a href="../shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Etsy Offsite Ads fee calculator</p>
+<h1>Etsy Offsite Ads Fee Calculator</h1>
+<p class="sub">Enter an order and see exactly what an Offsite Ad costs you — at the 15% and 12% rates, with the $100 per-order cap applied. Compare the same order with and without ad attribution.</p>
+<p class="updated">Fee rates checked against Etsy's published policy, October 2026.</p>
+
+<div class="answer">
+<p><b>Short answer:</b> Etsy charges <b>15% of the order total</b> on a sale attributed to an Offsite Ad — dropping to <b>12%</b> once your shop has made <b>$10,000 USD or more</b> in any consecutive 365-day period. The fee is <b>capped at $100 per order</b>, so it stops growing once the order passes <b>$666.67</b> (at 15%) or <b>$833.33</b> (at 12%). It is charged <i>in addition to</i> the normal listing, transaction and processing fees.</p>
+</div>
+
+<div class="grid">
+<section class="card" aria-label="Inputs">
+  <h2 style="margin-top:0">The order</h2>
+  <label>Item price ($)<input id="price" type="number" step="0.01" min="0" value="45"></label>
+  <label>Quantity<input id="qty" type="number" step="1" min="1" value="1"></label>
+  <label>Shipping charged to buyer ($)<input id="ship" type="number" step="0.01" min="0" value="6"></label>
+  <label>Gift wrap charged ($)<input id="wrap" type="number" step="0.01" min="0" value="0"></label>
+  <label>Shop revenue in last 365 days<select id="tier"><option value="0.15">Under $10,000 (15%)</option><option value="0.12">$10,000 or more (12%)</option></select></label>
+  <label>Order came from an Offsite Ad?<select id="attr"><option value="1">Yes</option><option value="0">No</option></select></label>
+  <label>Currency conversion (2.5%)?<select id="fx"><option value="0">No</option><option value="0.025">Yes</option></select></label>
+</section>
+
+<section class="card" aria-live="polite">
+  <h2 style="margin-top:0">What Etsy takes</h2>
+  <div class="row"><span>Order total</span><b id="o_gross">$0.00</b></div>
+  <div class="row"><span>Listing fee(s)</span><span id="o_list"></span></div>
+  <div class="row"><span>Transaction fee (6.5%)</span><span id="o_txn"></span></div>
+  <div class="row"><span>Payment processing (3% + $0.25)</span><span id="o_proc"></span></div>
+  <div class="row"><span>Currency conversion</span><span id="o_fx"></span></div>
+  <div class="row"><span>Standard fees subtotal</span><b id="o_std"></b></div>
+  <div class="row"><span><b>Offsite Ads fee</b></span><b id="o_ad"></b></div>
+  <p class="updated" id="o_adnote" style="margin:6px 0 0"></p>
+  <div class="row total"><span>Total fees (with ad)</span><span id="o_totalwith"></span></div>
+  <div class="row"><span>Total fees (no ad)</span><span id="o_totalwithout"></span></div>
+  <p style="margin:18px 0 0">You keep (with ad)</p>
+  <div class="big" id="o_keepwith">$0.00</div>
+  <p class="sub" id="o_keepnote"></p>
+</section>
+</div>
+
+<section>
+  <h2>Offsite Ads fee by order value</h2>
+  <p class="sub">The $100 cap is the reason a big order is not automatically a disaster. Here is the fee on the order total at both rates.</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Order total</th><th>Fee at 15%</th><th>Fee at 12%</th><th>Cap in effect?</th></tr></thead>
+    <tbody id="capTable"></tbody>
+  </table>
+  </div>
+  <p class="updated">The cap begins at $666.67 (15%) and $833.33 (12%). Above those totals the fee stays flat at $100.</p>
+</section>
+
+<section>
+  <h2>What the two rates actually mean for your pricing</h2>
+  <p>Because the ad fee is a percentage of the amount the buyer pays, you cannot absorb it by "adding the fee on top" — you have to divide by what is left. To keep the <i>same</i> net revenue after an attributed sale:</p>
+  <div class="formula">price after an ad sale = price ÷ (1 − ad rate)<br><br>15% → ÷ 0.85 = <b>+17.6%</b> on your price<br>12% → ÷ 0.88 = <b>+13.6%</b> on your price</div>
+  <p>So a $45 item needs to sell for about $52.94 to net the same $45 at the 15% rate. Most sellers do not do this per order — they set one price that already covers the expected share of ad-attributed sales, or they opt out while they are eligible.</p>
+  <div class="note"><b>Opt-out rule:</b> shops that have never sold $10,000 USD in a rolling 365-day period can turn Offsite Ads off in Shop Manager → Settings → Offsite Ads. Once you cross $10,000, participation is required for the lifetime of the shop and the rate falls to 12%. Etsy's own help page is the authority here — check it before you rely on either.</div>
+</section>
+
+<section>
+  <h2>Questions sellers actually ask</h2>
+  <details open><summary>How much is the Etsy Offsite Ads fee in 2026?</summary><p>15% of the attributed order total under $10,000 USD in a rolling 365-day period, 12% at or above it. Capped at $100 USD per order.</p></details>
+  <details><summary>Does the fee apply to shipping and gift wrap?</summary><p>Yes. Etsy's ad fee is a percentage of the order total, which includes what you charge for shipping and gift wrap — the same base the 6.5% transaction fee uses. See the <a href="../etsy-fees-on-shipping-calculator/">fees on shipping calculator</a> for that side of the stack.</p></details>
+  <details><summary>Is it charged on repeat orders from the same buyer?</summary><p>Attribution lasts 30 days from the ad click, and a single click can lead to more than one order in that window. Each attributed order carries its own fee, each capped at $100.</p></details>
+  <details><summary>What if the buyer refunds?</summary><p>Etsy does not charge the Offsite Ads fee on a refunded order when the refund is processed before the fee would apply, and the standard fees are reversed per Etsy's policy. Confirm the current treatment on Etsy's Fees &amp; Payments Policy — it is the only source that matters.</p></details>
+  <details><summary>Do I also pay the 6.5% transaction fee on an ad sale?</summary><p>Yes. The ad fee stacks on top of every other fee. On a 15% attributed order the combined take is often over 25% of the order total — the calculator above shows the full stack.</p></details>
+</section>
+
+<section class="cta card">
+  <h2>Make every order's real profit visible</h2>
+  <p>The <b>Etsy Seller Profit Toolkit 2026</b> spreadsheet does this math for your whole shop, not one order at a time.</p>
+  <ul>
+    <li>Orders log (500 rows) — fees, profit and margin per order, Offsite Ads aware</li>
+    <li>Price calculator for 15 products with target-margin pricing</li>
+    <li>Monthly dashboard with a revenue-vs-profit chart</li>
+    <li>Inventory tracker with reorder alerts</li>
+    <li>Excel, Google Sheets &amp; Numbers · editable fee rates for any country</li>
+  </ul><br>
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/etsy-profit-toolkit">Get the Toolkit — $12</a>
+  <p class="sub">Instant download · 14-day refund</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../etsy-fees-on-shipping-calculator/">Is the Etsy fee charged on shipping?<span>Calculator + the free-shipping trade-off</span></a>
+    <a href="../etsy-fees-by-country/">Etsy fees by country 2026<span>UK, Canada, Australia, EU rates</span></a>
+    <a href="../../guides/etsy-pricing-formula/">Etsy pricing formula for handmade<span>Markup, margin and the full cost stack</span></a>
+    <a href="../../">ZeroStore<span>The free kit these tools are built with</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/360000338367-How-Etsy-s-Offsite-Ads-Work" rel="nofollow noopener">How Etsy's Offsite Ads Work</a> (rates, $10k threshold, $100 cap, 30-day attribution)</li>
+    <li>Etsy — <a href="https://www.etsy.com/legal/fees/" rel="nofollow noopener">Fees &amp; Payments Policy</a></li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115014483627-What-are-the-Fees-and-Taxes-for-Selling-on-Etsy" rel="nofollow noopener">What are the Fees and Taxes for Selling on Etsy?</a> ($0.20 listing, 6.5% transaction on item + shipping)</li>
+    <li>Etsy Help — <a href="https://help.etsy.com/hc/en-us/articles/115015628847-What-are-Payment-Processing-Fees-for-Selling-on-Etsy" rel="nofollow noopener">Payment Processing Fees</a> (US 3% + $0.25)</li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="./">Offsite Ads fee calculator</a> ·
+    <a href="../etsy-fees-on-shipping-calculator/">Fees on shipping</a> ·
+    <a href="../etsy-fees-by-country/">Fees by country</a> ·
+    <a href="../shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a> ·
+    <a href="../digital-product-platform-fees-calculator/">Digital product platforms</a> ·
+    <a href="../../guides/etsy-pricing-formula/">Pricing formula</a> ·
+    <a href="../../guides/sell-digital-products-github-pages/">Sell on GitHub Pages</a> ·
+    <a href="../../guides/gumroad-license-key-verification-javascript/">Gumroad license keys</a>
+  </p>
+  <p>Estimates only — always confirm rates with Etsy's current Fees &amp; Payments Policy. Rates last checked October 2026. Not affiliated with Etsy, Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var num=function(id){var v=parseFloat($(id).value);return isNaN(v)?0:v;};
+  var money=function(x){return (x<0?"-":"")+"$"+(Math.abs(x)+1e-9).toFixed(2);};
+  var LIST=0.20, TXN=0.065, PP=0.03, PPF=0.25, CAP=100;
+
+  function calc(){
+    var price=num('price'), qty=Math.max(1,Math.round(num('qty'))||1);
+    var ship=num('ship'), wrap=num('wrap');
+    var gross=price*qty+ship+wrap;
+    var rate=parseFloat($('tier').value);
+    var attributed=$('attr').value==='1';
+    var fxRate=parseFloat($('fx').value)||0;
+
+    var list=LIST*qty;
+    var txn=gross*TXN;
+    var proc=gross*PP+PPF;
+    var fx=gross*fxRate;
+    var std=list+txn+proc+fx;
+
+    var raw=attributed?gross*rate:0;
+    var ad=Math.min(raw,CAP);
+    var capped=raw>CAP;
+
+    var withAd=std+ad, without=std;
+
+    $('o_gross').textContent=money(gross);
+    $('o_list').textContent=money(list);
+    $('o_txn').textContent=money(txn);
+    $('o_proc').textContent=money(proc);
+    $('o_fx').textContent=money(fx);
+    $('o_std').textContent=money(std);
+    $('o_ad').textContent=attributed?money(ad):'not attributed';
+    $('o_totalwith').textContent=attributed?money(withAd):'—';
+    $('o_totalwithout').textContent=money(without);
+
+    var note;
+    if(!attributed){ note='No ad click, no ad fee. This order only pays the standard 10–13% stack.'; }
+    else if(capped){ note='Capped: '+ (rate*100).toFixed(0)+'% of the order total would be '+money(raw)+', so Etsy stops at $100. Cap applied to orders over '+money(CAP/rate)+'.'; }
+    else { note='Effective ad rate on this order: '+((ad/gross)*100).toFixed(2)+'%. The cap starts at '+money(CAP/rate)+'.'; }
+    $('o_adnote').textContent=note;
+
+    var keep=gross-(attributed?withAd:without);
+    var pctKeep=gross?((keep/gross)*100):0;
+    $('o_keepwith').textContent=money(keep);
+    $('o_keepwith').className='big '+((keep>=0)?'ok':'bad');
+    var stackPct=gross?(((attributed?withAd:without)/gross)*100).toFixed(1):'0.0';
+    var diff=attributed?money(withAd-without):null;
+    $('o_keepnote').textContent=gross
+      ? 'Etsy takes '+stackPct+'% of the order total ('+(attributed?diff+' more than an organic order':'no ad fee')+'). Before your own material and shipping costs.'
+      : '';
+  }
+
+  // Static cap table
+  var rows=[], totals=[20,50,100,250,500,666.67,833.33,1000,2500];
+  for(var i=0;i<totals.length;i++){
+    var t=totals[i], f15=Math.min(t*0.15,CAP), f12=Math.min(t*0.12,CAP);
+    var capNote=(t*0.15>CAP)?'Yes — capped at $100':(t*0.12===CAP?'At the 12% threshold':'No');
+    rows.push('<tr><td>'+money(t)+'</td><td>'+money(f15)+'</td><td>'+money(f12)+'</td><td>'+capNote+'</td></tr>');
+  }
+  $('capTable').innerHTML=rows.join('');
+
+  document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',calc);e.addEventListener('change',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

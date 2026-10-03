@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gumroad License Key Verification in JavaScript (Node + Browser)</title>
+<meta name="description" content="Working code to verify a Gumroad license key: the POST /v2/licenses/verify endpoint, a Node function that handles refunds and chargebacks correctly, a Cloudflare Worker proxy for browser apps, the CORS trap, and the five gotchas that break real integrations.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/guides/gumroad-license-key-verification-javascript/">
+<meta property="og:title" content="Gumroad License Key Verification in JavaScript (Node + Browser)">
+<meta property="og:description" content="The endpoint, working Node and browser code, and the CORS trap nobody mentions.">
+<meta property="og:url" content="https://astonysh.github.io/zerostore/guides/gumroad-license-key-verification-javascript/">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/tools.css">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I verify a Gumroad license key in JavaScript?","acceptedAnswer":{"@type":"Answer","text":"POST to https://api.gumroad.com/v2/licenses/verify with a form-encoded body containing license_key and product_id. No access token is required. Check that the response has success: true, then also check purchase.refunded and purchase.chargebacked, because a refunded sale still returns success."}},
+{"@type":"Question","name":"Why does the Gumroad license API fail in the browser with a CORS error?","acceptedAnswer":{"@type":"Answer","text":"api.gumroad.com does not send an Access-Control-Allow-Origin header, so browsers block the request before it leaves. Call the API from a server or a small proxy such as a Cloudflare Worker and have the browser call your proxy instead."}},
+{"@type":"Question","name":"Does a refunded Gumroad purchase still validate?","acceptedAnswer":{"@type":"Answer","text":"Yes, unless you check for it. The verify call returns success: true for a refunded or charged-back sale. Read purchase.refunded and purchase.chargebacked and treat either as invalid."}},
+{"@type":"Question","name":"What does increment_uses_count do?","acceptedAnswer":{"@type":"Answer","text":"It defaults to true, which bumps the license's use counter on every call. If you re-validate on every app launch, pass increment_uses_count=false for those checks and only increment on the first activation, otherwise the counter is meaningless and any usage limit you set in Gumroad is hit almost immediately."}},
+{"@type":"Question","name":"Do I need a product_id to verify a license?","acceptedAnswer":{"@type":"Answer","text":"Gumroad recommends it and it may be required for products created after a certain date; omitting it for those products returns a 500 with the message that the product_id parameter is required. Treat that as a configuration error, not an invalid license."}}]}</script>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <a class="brand" href="../../">Zero<span>Store</span></a>
+  <nav>
+    <a href="../../guides/sell-digital-products-github-pages/">GitHub Pages guide</a>
+    <a href="./" aria-current="page">License keys</a>
+    <a href="../../tools/digital-product-platform-fees-calculator/">Platform fees</a>
+    <a href="https://github.com/astonysh/zerostore">Free kit</a>
+  </nav>
+</div></header>
+
+<main>
+<p class="crumbs"><a href="../../">Home</a> › <a href="../../demo/seller-profit-sheets/">Free tools</a> › Gumroad license key verification</p>
+<h1>Gumroad License Key Verification in JavaScript</h1>
+<p class="sub">The endpoint, working Node code that handles refunds correctly, a proxy for browser apps, and the five things that break real integrations. Every example here runs against Gumroad's public license API — no access token, no SDK.</p>
+<p class="updated">Checked against Gumroad's API documentation, October 2026.</p>
+
+<div class="answer">
+<p><b>Short version:</b> <code>POST https://api.gumroad.com/v2/licenses/verify</code> with a form-encoded body containing <code>license_key</code> and <code>product_id</code>. No authentication is required. Check <code>success</code> in the response — then check <code>purchase.refunded</code> and <code>purchase.chargebacked</code>, because a refunded sale still returns <code>success: true</code>. <b>Do not call it from a browser:</b> the API sends no <code>Access-Control-Allow-Origin</code> header, so the request is blocked before it is sent. Use a small proxy.</p>
+</div>
+
+<section>
+  <h2>The endpoint</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Parameter</th><th>Required</th><th>Default</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>license_key</code></td><td>Yes</td><td>—</td><td>The key from the buyer's receipt</td></tr>
+      <tr><td><code>product_id</code></td><td>Recommended</td><td>—</td><td>Your product's ID. May be required for products created after a certain date; <code>product_permalink</code> is an alternative</td></tr>
+      <tr><td><code>increment_uses_count</code></td><td>No</td><td><code>true</code></td><td>Bumps the license's use counter. Pass <code>false</code> for routine re-checks</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A successful response looks like this — <code>price</code> is in cents, and the <code>purchase</code> object carries everything you need to make a decision:</p>
+  <pre><code>{
+  "success": true,
+  "uses": 2,
+  "purchase": {
+    "email": "buyer@example.com",
+    "product_name": "My App",
+    "price": 2900,
+    "currency": "usd",
+    "quantity": 1,
+    "order_number": 1234567,
+    "license_key": "ABCD1234-EFGH5678-IJKL9012-MNOP3456",
+    "refunded": false,
+    "chargebacked": false,
+    "subscription_cancelled_at": null,
+    "subscription_ended_at": null,
+    "subscription_failed_at": null
+  }
+}</code></pre>
+  <p>Failures return <code>success: false</code> with a <code>message</code> — for example <i>"That license does not exist for the provided product."</i>, <i>"This license key has been disabled."</i> or <i>"Access to the purchase associated with this license has expired."</i></p>
+</section>
+
+<section>
+  <h2>Node: a verify function that gets it right</h2>
+  <p>Node 18 and later has <code>fetch</code> built in, so this has no dependencies. The important part is not the request — it is what happens after it.</p>
+  <pre><code>const GUMROAD_VERIFY = 'https://api.gumroad.com/v2/licenses/verify';
+
+export async function verifyLicense(licenseKey, { productId, incrementUses = true } = {}) {
+  const body = new URLSearchParams({
+    license_key: licenseKey.trim(),
+    increment_uses_count: String(incrementUses),
+  });
+  if (productId) body.set('product_id', productId);
+
+  let res;
+  try {
+    res = await fetch(GUMROAD_VERIFY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body,
+    });
+  } catch (err) {
+    // Network failure is NOT an invalid key. Say so and let the caller retry.
+    return { valid: false, reason: 'offline', retryable: true };
+  }
+
+  const data = await res.json().catch(() => null);
+  if (!data) return { valid: false, reason: `HTTP ${res.status}`, retryable: res.status >= 500 };
+  if (!data.success) return { valid: false, reason: data.message || 'invalid', retryable: res.status >= 500 };
+
+  const p = data.purchase || {};
+  if (p.refunded) return { valid: false, reason: 'refunded' };
+  if (p.chargebacked) return { valid: false, reason: 'chargeback' };
+  if (p.subscription_ended_at || p.subscription_cancelled_at) {
+    return { valid: false, reason: 'subscription ended' };
+  }
+
+  return { valid: true, uses: data.uses, email: p.email, purchase: p };
+}</code></pre>
+  <p>Usage:</p>
+  <pre><code>const result = await verifyLicense('ABCD1234-EFGH5678-IJKL9012-MNOP3456', {
+  productId: 'YOUR_PRODUCT_ID',
+});
+if (!result.valid) {
+  console.error(result.retryable ? 'Could not reach Gumroad — try again' : `License rejected: ${result.reason}`);
+}</code></pre>
+  <div class="note"><b>The distinction that matters:</b> <code>retryable</code> separates "we could not check" from "this key is bad". Collapsing the two — which a naive <code>if (!data.success) invalid()</code> does — tells paying customers their key is invalid every time their wifi drops. Check it before you ship.</div>
+</section>
+
+<section>
+  <h2>Browser: you need a proxy, and here is one</h2>
+  <p>If you call <code>https://api.gumroad.com/v2/licenses/verify</code> from page JavaScript, the request fails with:</p>
+  <pre><code>Access to fetch at 'https://api.gumroad.com/v2/licenses/verify' from origin
+'https://yourname.github.io' has been blocked by CORS policy: No
+'Access-Control-Allow-Origin' header is present on the requested resource.</code></pre>
+  <p>That is not a bug you can configure around — the API simply does not send the header, and your product page should not hold the credentials to call it anyway. Put a tiny proxy in front. This one deploys free on Cloudflare Workers and keeps your <code>product_id</code> server-side:</p>
+  <pre><code>// worker.js — paste into the Cloudflare Workers editor, set PRODUCT_ID,
+// ALLOWED_ORIGIN, then deploy. No npm, no build step.
+const PRODUCT_ID = 'YOUR_PRODUCT_ID';
+const ALLOWED_ORIGIN = 'https://yourname.github.io';
+const CORS = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Vary': 'Origin',
+};
+
+export default {
+  async fetch(request) {
+    if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
+    if (request.method !== 'POST') return json({ valid: false, reason: 'method' }, 405);
+    if (request.headers.get('Origin') !== ALLOWED_ORIGIN) return json({ valid: false, reason: 'forbidden' }, 403);
+
+    let key;
+    try { key = (await request.json()).license_key; } catch { key = null; }
+    if (typeof key !== 'string' || !key.trim() || key.length > 128) {
+      return json({ valid: false, reason: 'bad request' }, 400);
+    }
+
+    const res = await fetch('https://api.gumroad.com/v2/licenses/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ license_key: key.trim(), product_id: PRODUCT_ID, increment_uses_count: 'true' }),
+    });
+    const data = await res.json().catch(() => null);
+    const p = (data && data.purchase) || {};
+    const valid = !!(data && data.success && !p.refunded && !p.chargebacked
+                     && !p.subscription_ended_at && !p.subscription_cancelled_at);
+    return json({
+      valid,
+      uses: data ? data.uses : undefined,
+      reason: valid ? undefined : (data && data.message) || 'invalid',
+    });
+  },
+};
+
+function json(body, status = 200) {
+  return new Response(JSON.stringify(body), { status, headers: CORS });
+}</code></pre>
+  <p>Then the browser side is four lines:</p>
+  <pre><code>const VERIFY_URL = 'https://your-worker.your-name.workers.dev/verify';
+
+async function verifyLicense(licenseKey) {
+  try {
+    const res = await fetch(VERIFY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ license_key: licenseKey }),
+    });
+    if (!res.ok) return { valid: false, retryable: res.status >= 500 };
+    return res.json();
+  } catch {
+    return { valid: false, retryable: true };  // offline, not invalid
+  }
+}</code></pre>
+  <p>The <code>Origin</code> check is deliberate but weak on its own — any client can send a fake header. It stops other websites from using your proxy as a free verification service; it is not authentication. If you need stronger guarantees, put the real gating behind a signed token the proxy issues, or gate the downloadable asset itself rather than the app's user interface.</p>
+</section>
+
+<section>
+  <h2>Python, if your app is not JavaScript</h2>
+  <pre><code>import requests
+
+GUMROAD_VERIFY = "https://api.gumroad.com/v2/licenses/verify"
+
+def verify_license(license_key: str, product_id: str, increment: bool = True) -> dict:
+    """{"valid": bool, "reason": str | None, "email": str | None}"""
+    try:
+        r = requests.post(GUMROAD_VERIFY, timeout=10, data={
+            "license_key": license_key.strip(),
+            "product_id": product_id,
+            "increment_uses_count": "true" if increment else "false",
+        })
+    except requests.RequestException as exc:
+        return {"valid": False, "reason": f"network: {exc}", "email": None}
+
+    try:
+        data = r.json()
+    except ValueError:
+        return {"valid": False, "reason": f"HTTP {r.status_code}", "email": None}
+
+    if not data.get("success"):
+        return {"valid": False, "reason": data.get("message", "invalid"), "email": None}
+
+    p = data.get("purchase", {})
+    if p.get("refunded") or p.get("chargebacked"):
+        return {"valid": False, "reason": "refunded or charged back", "email": None}
+    if p.get("subscription_ended_at") or p.get("subscription_cancelled_at"):
+        return {"valid": False, "reason": "subscription ended", "email": None}
+    return {"valid": True, "reason": None, "email": p.get("email")}</code></pre>
+  <p>Or with no dependencies at all, from a shell or a build script:</p>
+  <pre><code>curl -X POST https://api.gumroad.com/v2/licenses/verify \
+  -d "product_id=YOUR_PRODUCT_ID" \
+  -d "license_key=ABCD1234-EFGH5678-IJKL9012-MNOP3456"</code></pre>
+</section>
+
+<section>
+  <h2>The five gotchas that break real integrations</h2>
+  <ol>
+    <li><b>A refunded sale still validates.</b> The API returns <code>success: true</code> with <code>purchase.refunded: true</code>. If you only check <code>success</code>, refunded customers keep full access forever. Check both flags, and the three subscription timestamps if you sell subscriptions.</li>
+    <li><b>Browser calls fail with a CORS error.</b> No <code>Access-Control-Allow-Origin</code> header is sent. Use a server or a proxy. This is the single most common reason people conclude "the API is broken".</li>
+    <li><b><code>uses</code> is global, not per device.</b> It counts verifications made with incrementing enabled, across every machine the buyer owns. It is a rough telemetry signal, not DRM.</li>
+    <li><b><code>increment_uses_count</code> defaults to <code>true</code>.</b> If you re-validate on every launch, you inflate the counter and burn through any usage limit you configured in Gumroad. Pass <code>false</code> for routine checks; increment once, on first activation.</li>
+    <li><b>Offline users get locked out.</b> A pure online check fails closed, which is safe and hostile at the same time. Cache the last successful verification locally with an expiry — a 7- to 30-day grace period is the usual compromise — and re-verify when the network returns.</li>
+  </ol>
+  <div class="note"><b>One more:</b> if you omit <code>product_id</code> for a product that requires it, Gumroad returns <b>HTTP 500</b>, not 400 — with the message that <code>product_id</code> is required. Do not let a generic "500 means try again" path or a "500 means invalid" path swallow it; log the message.</div>
+</section>
+
+<section>
+  <h2>Getting a real key to test with</h2>
+  <p>You cannot test activation without a purchase. The fastest legitimate way: create a <b>100%-off discount code</b> in your Gumroad product, buy your own product with it, and use the key from the receipt email. Then delete the code. This gives you a real key, a real <code>purchase</code> object and a real refund path to test against — and you can refund yourself afterwards to watch the <code>refunded</code> flag do its job.</p>
+</section>
+
+<section>
+  <h2>Questions people actually ask</h2>
+  <details open><summary>How do I verify a Gumroad license key in JavaScript?</summary><p>POST form-encoded to <code>https://api.gumroad.com/v2/licenses/verify</code> with <code>license_key</code> and <code>product_id</code>. No token required. Check <code>success</code>, then <code>refunded</code> and <code>chargebacked</code>.</p></details>
+  <details><summary>Why do I get a CORS error in the browser?</summary><p>The API sends no <code>Access-Control-Allow-Origin</code> header. Route the call through your own server or a Cloudflare Worker proxy — code above.</p></details>
+  <details><summary>Do refunded purchases still validate?</summary><p>Yes, unless you check <code>purchase.refunded</code> or <code>purchase.chargebacked</code>. Treat either as invalid.</p></details>
+  <details><summary>Is there a separate endpoint to increment uses?</summary><p>No. Usage counting happens on the verify call itself via <code>increment_uses_count</code>, which defaults to <code>true</code>.</p></details>
+  <details><summary>What is my product ID?</summary><p>Open the product in Gumroad and look at the license-key or content section — it is shown alongside the license key settings. Keep it in the proxy, not in page JavaScript.</p></details>
+  <details><summary>Do Lemon Squeezy and Payhip have this too?</summary><p>Yes, both issue license keys via their own APIs. The shape of the problem is identical: verify server-side, handle refunds explicitly, and distinguish "invalid" from "unreachable".</p></details>
+</section>
+
+<section class="cta card">
+  <h2>License-key scripts that already handle this</h2>
+  <p><b>ZeroStore Pro</b> includes working license-key verification for <b>Node, Python and the browser</b> — including the proxy pattern above, refund and chargeback handling, local caching with a grace period, and a test harness that does not need a live purchase.</p>
+  <ul>
+    <li>Verify functions for Node, Python and browser, ready to drop in</li>
+    <li>Refund, chargeback and subscription handling built in</li>
+    <li>Offline grace-period caching so paying users are never locked out by wifi</li>
+    <li>6 agent skills for Claude Code, Codex, Cursor and Gemini CLI</li>
+    <li>Launch playbook with 20+ post templates</li>
+    <li>The free <a href="https://github.com/astonysh/zerostore">ZeroStore kit</a> is included — and MIT licensed</li>
+  </ul><br>
+  <a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/zerostore-pro">Get Pro — $29</a>
+  <p class="sub">One-time · 14-day refund · the free kit alone will get you started</p>
+</section>
+
+<section>
+  <h2>Keep reading</h2>
+  <div class="related">
+    <a href="../../guides/sell-digital-products-github-pages/">Sell digital products from GitHub Pages<span>Where a static page can and cannot hold a secret</span></a>
+    <a href="../../tools/digital-product-platform-fees-calculator/">Gumroad vs Lemon Squeezy vs Payhip<span>What each takes, calculated</span></a>
+    <a href="../etsy-pricing-formula/">Etsy pricing formula for handmade<span>Pricing the product you are licensing</span></a>
+    <a href="../../">ZeroStore<span>The free kit these tools are built with</span></a>
+  </div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <ul class="sources">
+    <li>Gumroad API — <a href="https://gumroad.com/api#licenses" rel="nofollow noopener">Verify a license</a> (endpoint, parameters, response fields, error messages)</li>
+    <li>Gumroad — <a href="https://gumroad.com/pricing" rel="nofollow noopener">Pricing</a> (license keys are a product feature)</li>
+    <li>MDN — <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS" rel="nofollow noopener">Cross-Origin Resource Sharing (CORS)</a></li>
+    <li>Cloudflare — <a href="https://developers.cloudflare.com/workers/" rel="nofollow noopener">Workers documentation</a> (free tier for the proxy)</li>
+  </ul>
+</section>
+
+<footer>
+  <p><b>Free tools:</b>
+    <a href="../../tools/etsy-offsite-ads-fee-calculator/">Offsite Ads fee calculator</a> ·
+    <a href="../../tools/etsy-fees-on-shipping-calculator/">Fees on shipping</a> ·
+    <a href="../../tools/etsy-fees-by-country/">Fees by country</a> ·
+    <a href="../../tools/shopify-vs-etsy-fees-calculator/">Shopify vs Etsy</a> ·
+    <a href="../../tools/digital-product-platform-fees-calculator/">Digital product platforms</a> ·
+    <a href="../etsy-pricing-formula/">Pricing formula</a> ·
+    <a href="../sell-digital-products-github-pages/">Sell on GitHub Pages</a> ·
+    <a href="./">Gumroad license keys</a>
+  </p>
+  <p>Code samples are provided as-is — test them against your own products before shipping. Always confirm API behaviour with Gumroad's current documentation. Checked October 2026. Not affiliated with Gumroad, Cloudflare, Lemon Squeezy, Payhip or Etsy, Inc. Built with <a href="../../">ZeroStore</a>.</p>
+</footer>
+</main>
+</body>
+</html>
