@@ -1,21 +1,110 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Seller Profit Sheets — coming soon · ZeroStore demo</title>
-  <meta name="robots" content="noindex">
-  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Etsy Fee Calculator 2026 — True Profit After Every Fee (Free)</title>
+<meta name="description" content="Free Etsy fee calculator for 2026: listing, 6.5% transaction, payment processing, Offsite Ads and currency fees. See your real profit and the price you need for your target margin.">
+<link rel="canonical" href="https://astonysh.github.io/zerostore/demo/seller-profit-sheets/">
+<meta property="og:title" content="Etsy Fee Calculator 2026 — True Profit After Every Fee">
+<meta property="og:description" content="Free, no signup. Includes Offsite Ads and target-margin pricing.">
+<script src="https://gumroad.com/js/gumroad.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How much does Etsy take per sale in 2026?","acceptedAnswer":{"@type":"Answer","text":"For US sellers: $0.20 listing fee, 6.5% transaction fee on item price plus shipping, and 3% + $0.25 payment processing. If the order came from an Offsite Ad, add 15% (12% for sellers over $10k/year), capped at $100. Typically 10–13% without ads, up to ~25% with ads."}},
+{"@type":"Question","name":"Is the transaction fee charged on shipping?","acceptedAnswer":{"@type":"Answer","text":"Yes. Etsy's 6.5% transaction fee applies to the item price plus the shipping and gift-wrap you charge."}},
+{"@type":"Question","name":"How do I price my Etsy item for a target profit margin?","acceptedAnswer":{"@type":"Answer","text":"Price = (all your costs + fixed fees) / (1 − percentage fees − target margin) − shipping charged. This calculator does it for you."}}]}</script>
+<style>
+:root{--fg:#1f2933;--bg:#fff;--mut:#667085;--acc:#ff6b2c;--card:#f7f7f5;--line:#e5e7eb;--ok:#0a7d39;--bad:#c62828}
+@media(prefers-color-scheme:dark){:root{--fg:#ececec;--bg:#121212;--mut:#9aa0a6;--card:#1d1d1d;--line:#2c2c2c;--ok:#4ade80;--bad:#f87171}}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--fg);background:var(--bg)}
+main{max-width:900px;margin:auto;padding:40px 20px}h1{font-size:2.1rem;line-height:1.2;margin:.2em 0}.sub{color:var(--mut)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+label{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0;font-size:.95rem}
+input,select{width:120px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit;text-align:right}
+.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}.row:last-child{border:0}
+.big{font-size:1.9rem;font-weight:700}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.btn{display:inline-block;background:var(--acc);color:#fff;padding:13px 24px;border-radius:10px;text-decoration:none;font-weight:600}
+.cta{margin-top:36px;text-align:center}.cta ul{text-align:left;display:inline-block;margin:10px 0 20px}
+details{margin:10px 0}summary{cursor:pointer;font-weight:600}footer{color:var(--mut);font-size:.82rem;margin-top:50px}
+</style>
 </head>
-<body>
-<!-- PLACEHOLDER: the lead replaces this whole folder with the real demo store. -->
-<nav class="nav"><div class="wrap"><a class="logo" href="../../">Zero<span>Store</span></a><div class="nav-links"><a href="../../log/">Experiment log</a></div></div></nav>
-<main class="article" style="text-align:center">
-  <span class="eyebrow">Demo store · coming soon</span>
-  <h1>Seller Profit Sheets</h1>
-  <p>Profit, fee and pricing spreadsheets for Etsy and Shopify sellers — the first product sold with ZeroStore. It's being built right now.</p>
-  <p><a class="btn btn-ghost" href="../../log/">Follow the experiment log</a></p>
+<body><main>
+<p class="sub">Free tool · no signup · updated Oct 2026</p>
+<h1>Etsy Fee Calculator 2026</h1>
+<p class="sub">See exactly what Etsy takes — listing, transaction, payment processing, Offsite Ads, currency conversion — and the price you need to hit your margin.</p>
+
+<div class="grid">
+<section class="card" aria-label="Inputs">
+<h2 style="margin-top:0">Your order</h2>
+<label>Item price ($)<input id="price" type="number" step="0.01" value="28"></label>
+<label>Quantity<input id="qty" type="number" step="1" min="1" value="1"></label>
+<label>Shipping charged to buyer ($)<input id="ship" type="number" step="0.01" value="0"></label>
+<label>Your shipping cost ($)<input id="shipcost" type="number" step="0.01" value="5.20"></label>
+<label>Materials + packaging per item ($)<input id="mat" type="number" step="0.01" value="5.30"></label>
+<label>Labor per item (hours × rate $)<input id="labor" type="number" step="0.01" value="9"></label>
+<label>Sale came from Offsite Ad?<select id="ad"><option value="0">No</option><option value="0.15">Yes (15%)</option><option value="0.12">Yes (12%)</option></select></label>
+<label>Currency conversion (2.5%)?<select id="fx"><option value="0">No</option><option value="0.025">Yes</option></select></label>
+<label>Target margin (%)<input id="target" type="number" step="1" value="30"></label>
+<details><summary>Advanced: change fee rates (non-US sellers)</summary>
+<label>Listing fee ($)<input id="f_list" type="number" step="0.01" value="0.20"></label>
+<label>Transaction fee (%)<input id="f_txn" type="number" step="0.1" value="6.5"></label>
+<label>Processing (%)<input id="f_pp" type="number" step="0.1" value="3"></label>
+<label>Processing fixed ($)<input id="f_ppf" type="number" step="0.01" value="0.25"></label>
+</details>
+</section>
+<section class="card" aria-live="polite">
+<h2 style="margin-top:0">Result</h2>
+<div class="row"><span>Revenue</span><b id="o_rev"></b></div>
+<div class="row"><span>Listing fee</span><span id="o_list"></span></div>
+<div class="row"><span>Transaction fee</span><span id="o_txn"></span></div>
+<div class="row"><span>Payment processing</span><span id="o_pp"></span></div>
+<div class="row"><span>Offsite Ads</span><span id="o_ad"></span></div>
+<div class="row"><span>Currency conversion</span><span id="o_fx"></span></div>
+<div class="row"><span><b>Total Etsy fees</b></span><b id="o_fees"></b></div>
+<div class="row"><span>Your costs</span><span id="o_cost"></span></div>
+<p style="margin:18px 0 0">Profit</p><div class="big" id="o_profit"></div>
+<p class="sub" id="o_margin"></p>
+<div class="row"><span>Price for <span id="o_t"></span>% margin</span><b id="o_need"></b></div>
+</section>
+</div>
+
+<section class="cta card">
+<h2>Track every order, not just one</h2>
+<p>The <b>Etsy Seller Profit Toolkit 2026</b> spreadsheet does this math automatically for your whole shop.</p>
+<ul>
+<li>Price calculator for 15 products side by side, with target-margin pricing</li>
+<li>Orders log (500 rows) — fees, profit & margin per order, Offsite Ads aware</li>
+<li>Monthly dashboard with revenue-vs-profit chart</li>
+<li>Inventory tracker with reorder alerts</li>
+<li>Excel, Google Sheets & Numbers · editable fee rates for any country</li>
+</ul><br>
+<a class="btn gumroad-button" href="https://astonysh.gumroad.com/l/etsy-profit-toolkit">Get the Toolkit — $12</a>
+<p class="sub">Instant download · 14-day refund</p>
+</section>
+
+<section>
+<h2>Etsy fees in 2026, explained</h2>
+<details open><summary>How much does Etsy take per sale?</summary><p>US sellers pay a $0.20 listing fee, a 6.5% transaction fee on item price <i>plus shipping</i>, and 3% + $0.25 payment processing. Without ads that's usually 10–13% of the order. If the buyer came through an Offsite Ad, Etsy adds 15% (12% if you sold over $10k in the last 12 months), capped at $100 per order — total fees can reach ~25%.</p></details>
+<details><summary>Is the transaction fee charged on shipping?</summary><p>Yes — the 6.5% applies to what you charge for shipping and gift wrap too. "Free shipping" with the cost baked into the price is charged the same.</p></details>
+<details><summary>How do I price for a target margin?</summary><p>Price = (costs + fixed fees) ÷ (1 − percentage fees − target margin) − shipping charged. The calculator above solves it for you.</p></details>
+<details><summary>Do these rates apply outside the US?</summary><p>Processing fees vary by country (e.g. UK, EU, Canada). Open "Advanced" above and enter the rates from Etsy's Fees &amp; Payments Policy for your country.</p></details>
+</section>
+<footer>Estimates only — always confirm with Etsy's current Fees &amp; Payments Policy. Not affiliated with Etsy, Inc. Built with <a href="https://astonysh.github.io/zerostore/">ZeroStore</a>.</footer>
 </main>
-</body>
-</html>
+<script>
+const $=id=>document.getElementById(id),v=id=>parseFloat($(id).value)||0,m=x=>(x<0?"-$":"$")+Math.abs(x).toFixed(2);
+function calc(){
+ const p=v('price'),q=Math.max(1,Math.round(v('qty'))),s=v('ship'),gross=p*q+s;
+ const L=v('f_list')*q,T=gross*v('f_txn')/100,P=gross*v('f_pp')/100+v('f_ppf'),A=Math.min(gross*parseFloat($('ad').value),100),F=gross*parseFloat($('fx').value);
+ const fees=L+T+P+A+F,cost=(v('mat')+v('labor'))*q+v('shipcost'),profit=gross-fees-cost;
+ $('o_rev').textContent=m(gross);$('o_list').textContent=m(L);$('o_txn').textContent=m(T);$('o_pp').textContent=m(P);
+ $('o_ad').textContent=m(A);$('o_fx').textContent=m(F);$('o_fees').textContent=m(fees)+(gross?` (${(fees/gross*100).toFixed(1)}%)`:'');
+ $('o_cost').textContent=m(cost);$('o_profit').textContent=m(profit);$('o_profit').className='big '+(profit>=0?'ok':'bad');
+ $('o_margin').textContent=gross?`Margin ${(profit/gross*100).toFixed(1)}% of revenue`:'';
+ const t=v('target')/100,rate=v('f_txn')/100+v('f_pp')/100+parseFloat($('ad').value)+parseFloat($('fx').value);
+ const base=(v('mat')+v('labor'))*q+v('shipcost')+L+v('f_ppf'),d=1-rate-t;
+ $('o_t').textContent=v('target');$('o_need').textContent=d<=0?'not reachable':m(((base/d)-s)/q)+' each';
+}
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',calc));calc();
+</script>
+</body></html>
